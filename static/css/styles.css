@@ -1,0 +1,273 @@
+/* Navbar Styles */
+.no-print {
+    position: relative;
+    z-index: 1000;
+}
+
+.no-print .container {
+    
+    width: 95%;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+.no-print .top-nav-holder {
+    height: 80px; /* Increase the height as desired */
+    background-color: #ffffff;
+    border-bottom: 1px solid #969696;
+}
+
+
+.no-print .layer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.no-print .logo-holder img.logo {
+    height: 50px;
+}
+
+.no-print .desktop-links a {
+    margin-right: 30px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.no-print .desktop-links a:hover {
+    color: #ffcc00;
+}
+
+/* Dropdown Menu Styles */
+.no-print .dropdown-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.no-print .dropdown-menu a {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Dropdown Menu Styles */
+.no-print .dropdown-menu ul {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+    border-radius: 8px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    width: 350px;
+    max-height: 500px; /* Set maximum height for the dropdown menu */
+    overflow-y: auto; /* Add scrollbar when content exceeds maximum height */
+}
+
+.no-print .dropdown-menu ul::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.no-print .dropdown-menu ul::-webkit-scrollbar-thumb {
+    background-color: #ccc; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+}
+
+.no-print .dropdown-menu ul::-webkit-scrollbar-thumb:hover {
+    background-color: #999; /* Color of the scrollbar thumb on hover */
+}
+
+.no-print .dropdown-menu ul li {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    transition: background-color 0.3s ease; /* Add transition for smooth hover effect */
+}
+
+.no-print .dropdown-menu ul li:last-child {
+    border-bottom: none;
+}
+
+.no-print .dropdown-menu ul li a {
+    display: flex;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease; /* Add transition for smooth hover effect */
+}
+
+.no-print .dropdown-menu ul li a:hover {
+    background-color: #f5f5f5;
+    color: #007bff; /* Change text color on hover */
+}
+
+.no-print .dropdown-content img {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.no-print .dropdown-content .font-weight-500 {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.no-print .dropdown-content .sub {
+    font-size: 12px;
+    color: #777;
+}
+
+/* Show dropdown content when hover */
+.no-print .dropdown-menu:hover ul {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animation for dropdown menu items */
+.no-print .dropdown-menu ul li {
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.no-print .dropdown-menu ul li:nth-child(1) {
+    transition-delay: 0.1s; /* Delay the animation of the first item */
+}
+
+.no-print .dropdown-menu ul li:nth-child(2) {
+    transition-delay: 0.2s; /* Delay the animation of the second item */
+}
+
+.no-print .dropdown-menu ul li:nth-child(3) {
+    transition-delay: 0.3s; /* Delay the animation of the third item */
+}
+
+/* Show dropdown menu items on hover */
+.no-print .dropdown-menu:hover ul li {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Add a subtle box shadow to dropdown menu */
+.no-print .dropdown-menu {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+
+/* JavaScript toggling class */
+.no-print .show {
+    display: block !important;
+}
+
+/* Add a border to the dropdown button */
+.no-print .dropdown-menu .button-plain {
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.no-print .dropdown-menu .button-plain:hover {
+    border-color: #007bff;
+    background-color: #007bff; /* Change background color on hover */
+}
+
+/* Adjust padding for dropdown icon */
+.no-print .dropdown-menu .icon-down {
+    margin-left: 8px;
+}
+
+/* Responsive Styles */
+@media (max-width: 767px) {
+    .no-print .layer {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .no-print .desktop-links {
+        display: none;
+    }
+
+    .no-print .menu-icon {
+        display: block;
+    }
+
+    .no-print .mobile-menu {
+        display: none;
+        width: 100%;
+        padding: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .no-print .mobile-links {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .no-print .mobile-links a {
+        margin-bottom: 10px;
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .no-print .mobile-links a:hover {
+        color: #007bff;
+    }
+
+    .no-print .top-navigation {
+        height: auto;
+    }
+
+    .no-print .logo-holder {
+        text-align: center;
+    }
+}
+
+/* Hide mobile navbar on desktop */
+@media (min-width: 768px) {
+    .mobile-nav {
+        display: none;
+    }
+}
+
+/* Additional Styling */
+/* Add hover effect for dropdown button */
+.no-print .dropdown-menu .button-plain:hover {
+    background-color: #0056b3; /* Darken background color on hover */
+    color: #fff;
+    transform: translateY(-2px); /* Add subtle upward movement on hover */
+}
+
+/* Add animation for dropdown menu */
+.no-print .dropdown-menu ul {
+    animation: fadeInDown 0.3s ease;
+}
+
+/* Define fadeInDown animation */
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

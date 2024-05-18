@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interest Rate Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* New styles for reset button */
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* New styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* New styles for chart container */
+        .chart-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Interest Rate Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Calculate interest rates based on present and future values of an investment.</h2>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="interestRateForm">
+                <label for="presentValue">Present Value (Rupees)</label>
+                <input type="number" id="presentValue" placeholder="Enter present value in rupees" min="0" required>
+                <label for="futureValue">Future Value (Rupees)</label>
+                <input type="number" id="futureValue" placeholder="Enter future value in rupees" min="0" required>
+                <label for="time">Time Duration (Years)</label>
+                <input type="number" id="time" placeholder="Enter time duration in years" min="0" step="0.01" required>
+                <button type="button" onclick="calculateInterestRate()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="interestRateResult" class="result"></div>
+            <!-- Reset button -->
+            <button class="reset-btn" onclick="resetInterestRateForm()">Reset</button>
+        </section>
+        <!-- Chart container -->
+        <section class="chart-container">
+            <canvas id="interestRateChart"></canvas>
+        </section>
+        <!-- Information section -->
+        <section class="info-section">
+            <h3>About Interest Rate Calculator</h3>
+            <p>
+                The Interest Rate Calculator helps you calculate interest rates based on present and future values of an investment.
+                Enter the present value, future value, and time duration, then click "Calculate" to get the results. The chart below
+                visualizes the trend of interest rates over time.
+            </p>
+        </section>
+    </main>
+    <script>
+        const ctx = document.getElementById('interestRateChart').getContext('2d');
+        let interestRateChart;
+
+        function calculateInterestRate() {
+            const presentValue = parseFloat(document.getElementById('presentValue').value);
+            const futureValue = parseFloat(document.getElementById('futureValue').value);
+            const time = parseFloat(document.getElementById('time').value);
+
+            // Check if any of the inputs are NaN
+            if (isNaN(presentValue) || isNaN(futureValue) || isNaN(time)) {
+                document.getElementById('error').innerHTML = 'Please enter valid numbers for all fields.';
+                return;
+            }
+
+            // Clear previous result
+            document.getElementById('interestRateResult').innerHTML = '';
+
+            // Calculate interest rate
+            const interestRate = calculateInterestRateValue(presentValue, futureValue, time);
+
+            // Display results
+            document.getElementById('interestRateResult').innerHTML = `
+                <p>Interest Rate: ${interestRate.toFixed(2)}%</p>
+            `;
+
+            // Update chart
+            if (interestRateChart) {
+                interestRateChart.destroy();
+            }
+            interestRateChart = generateChart(time, interestRate);
+        }
+
+        function calculateInterestRateValue(presentValue, futureValue, time) {
+            return (Math.pow(futureValue / presentValue, 1 / time) - 1) * 100;
+        }
+
+        function resetInterestRateForm() {
+            document.getElementById('interestRateForm').reset();
+            document.getElementById('error').innerHTML = '';
+            document.getElementById('interestRateResult').innerHTML = '';
+
+            // Destroy the chart if it exists
+            if (interestRateChart) {
+                interestRateChart.destroy();
+            }
+        }
+
+        function generateChart(time, interestRate) {
+            const labels = Array.from({ length: time }, (_, i) => `Year ${i + 1}`);
+
+            const chartData = {
+                labels: labels,
+                datasets: [{
+                    label: 'Interest Rate Trend',
+                    data: Array.from({ length: time }, () => interestRate.toFixed(2)),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            const chartOptions = {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            };
+
+            return new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: chartOptions
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestMash - Your Financial Companion</title>
+    <!-- External CSS libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon/site.webmanifest">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+     <script src="/static/js/script.js"></script>
+    <style>
+/* styles.css */
+
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    color: #333;
+}
+
+p {
+    color: #666;
+}
+
+/* Contact Form Styles */
+.contact-section {
+    background-color: #fff;
+    padding: 50px 0;
+    text-align: center;
+}
+
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 10px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.contact-form textarea {
+    resize: vertical;
+}
+
+.contact-form button[type="submit"],
+.contact-form button[type="button"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 48%;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.contact-form button[type="submit"]:hover,
+.contact-form button[type="button"]:hover {
+    background-color: #45a049;
+}
+
+.success-message,
+.error-message {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.success-message {
+    color: green;
+}
+
+.error-message {
+    color: red;
+}
+
+/* Additional Styles */
+.character-count {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+@media (max-width: 600px) {
+    .contact-form button[type="submit"],
+    .contact-form button[type="button"] {
+        width: 100%;
+    }
+}
+
+        .character-count {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        /* Additional Enhancements */
+/* Add hover effect to labels */
+.contact-form label:hover {
+    color: #4CAF50;
+}
+
+/* Style the success and error messages */
+.success-message,
+.error-message {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.success-message {
+    color: #4CAF50;
+}
+
+.error-message {
+    color: #f44336;
+}
+
+/* Add animation to success and error messages */
+.success-message,
+.error-message {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.success-message.show,
+.error-message.show {
+    opacity: 1;
+}
+
+/* Add background color on focus for input fields */
+.contact-form input[type="text"]:focus,
+.contact-form input[type="email"]:focus,
+.contact-form textarea:focus {
+    background-color: #f0f0f0;
+}
+
+/* Style the character count */
+.character-count {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Style the submit and clear buttons on hover */
+.contact-form button[type="submit"]:hover,
+.contact-form button[type="button"]:hover {
+    opacity: 0.8;
+    transition: opacity 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+/* Add padding to buttons for better spacing */
+.contact-form button[type="submit"],
+.contact-form button[type="button"] {
+    padding: 12px 20px;
+}
+
+/* Add box-shadow to form elements */
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea,
+.contact-form button[type="submit"],
+.contact-form button[type="button"] {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+    </style>
+</head>
+
+<body >
+    <!-- Navbar placeholder -->
+    <div id="navbar-placeholder"></div>
+
+<section class="contact-section">
+    <div class="container">
+        <h2>Contact Us</h2>
+        <p>Have a question or feedback? Drop us a message!</p>
+        
+        <div class="contact-form">
+            <form id="contactForm" action="/submit_contact_form" method="post">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" autocomplete="email" required>
+                
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                <span class="character-count" id="charCount">0/250</span>
+                
+                <button type="submit">Send Message</button>
+                <button type="button" onclick="clearForm()">Clear</button>
+            </form>
+            <div id="successMessage" class="success-message" style="display: none;">Your message has been sent successfully!</div>
+            <div id="errorMessage" class="error-message" style="display: none;">There was an error sending your message. Please try again later.</div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Client-side validation and form submission handling
+    document.getElementById("contactForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var message = document.getElementById("message").value;
+
+        if (name.trim() === "" || email.trim() === "" || message.trim() === "") {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        // Assuming you're using Fetch API for AJAX requests
+        fetch("/submit_contact_form", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                message: message,
+            }),
+        })
+        .then(response => {
+            if (response.ok) {
+                document.getElementById("successMessage").style.display = "block";
+                document.getElementById("contactForm").reset();
+            } else {
+                throw new Error("Network response was not ok.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            document.getElementById("errorMessage").style.display = "block";
+        });
+    });
+
+    // Character count for message field
+    document.getElementById("message").addEventListener("input", function() {
+        var charCount = this.value.length;
+        document.getElementById("charCount").textContent = charCount + "/250";
+    });
+
+    // Clear form fields
+    function clearForm() {
+        document.getElementById("contactForm").reset();
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debt Repayment Calculator</title>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* New styles for chart */
+        .chart-container {
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        canvas {
+            max-width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New styles for reset button */
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* New styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Debt Repayment Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Plan and track debt repayment strategies</h2>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="debtForm">
+                <label for="currentDebt">Current Debt Amount (Rupees)</label>
+                <input type="number" id="currentDebt" placeholder="Enter current debt amount" min="0" required>
+                <label for="monthlyPayment">Monthly Payment (Rupees)</label>
+                <input type="number" id="monthlyPayment" placeholder="Enter monthly payment amount" min="0" required>
+                <label for="interestRate">Annual Interest Rate (%)</label>
+                <input type="number" id="interestRate" placeholder="Enter annual interest rate" min="0" required>
+                <button type="button" onclick="calculateDebt()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="debtResult" class="result"></div>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function calculateDebt() {
+            const currentDebt = parseFloat(document.getElementById('currentDebt').value);
+            const monthlyPayment = parseFloat(document.getElementById('monthlyPayment').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+
+            if (isNaN(currentDebt) || isNaN(monthlyPayment) || isNaN(interestRate)) {
+                document.getElementById('error').innerHTML = 'Please enter valid numbers for all fields.';
+                return;
+            }
+
+            const monthlyInterestRate = interestRate / 12 / 100;
+            let months = 0;
+            let remainingDebt = currentDebt;
+
+            const debtData = [];
+
+            while (remainingDebt > 0 && months < 600) {
+                months++;
+                const interest = remainingDebt * monthlyInterestRate;
+                const principalPayment = Math.min(monthlyPayment - interest, remainingDebt);
+                remainingDebt -= principalPayment;
+                debtData.push(remainingDebt);
+            }
+
+            if (months === 600) {
+                document.getElementById('error').innerHTML = 'Unable to calculate debt repayment within reasonable time.';
+                return;
+            }
+
+            document.getElementById('debtResult').innerHTML = `
+                <p>Total months to repay debt: ${months}</p>
+                <p>Total Interest Paid: ₹${(months * monthlyPayment - currentDebt).toFixed(2)}</p>
+            `;
+
+            generateChart(debtData);
+        }
+
+        function generateChart(debtData) {
+            const ctx = document.getElementById('debtChart').getContext('2d');
+
+            const data = {
+                labels: Array.from(Array(debtData.length).keys()),
+                datasets: [{
+                    label: 'Remaining Debt',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    data: debtData,
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return 'Remaining Debt: ₹' + tooltipItem.yLabel.toFixed(2);
+                        }
+                    }
+                }
+            };
+
+            const config = {
+                type: 'line',
+                data: data,
+                options: options
+            };
+
+            new Chart(ctx, config);
+        }
+    </script>
+</body>
+</html>

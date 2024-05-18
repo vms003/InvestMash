@@ -1,0 +1,100 @@
+/* Add your CSS styles here */
+/* Updated body styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f3f4f6; /* Light gray background */
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Centered heading */
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50; /* Dark blue color for heading */
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); /* Text shadow for heading */
+}
+
+/* Grid layout for calculator list */
+.calculator-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px; /* Increased gap between calculators */
+}
+
+/* Calculator box styles */
+.calculator {
+    background: linear-gradient(to bottom, #fff, #f9f9f9); /* Gradient background */
+    padding: 20px;
+    border-radius: 10px; /* Rounded border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft box shadow for depth */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    position: relative; /* Position relative for icons */
+}
+
+/* Hover effect for calculator boxes */
+.calculator:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Title styles */
+.calculator h2 {
+    font-size: 18px; /* Reduced font size for calculator titles */
+    margin-bottom: 10px;
+    color: #2c3e50; /* Dark blue color for titles */
+}
+
+/* Description styles */
+.calculator p {
+    font-size: 14px; /* Reduced font size for calculator descriptions */
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* Icon styles */
+.calculator i {
+    font-size: 36px; /* Larger icon size */
+    margin-bottom: 10px;
+    color: #3498db; /* Blue color for icons */
+    position: absolute; /* Position absolute for icons */
+    top: 10px; /* Adjust top position */
+    right: 10px; /* Adjust right position */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .calculator {
+        padding: 15px; /* Decreased padding for smaller screens */
+    }
+    .calculator h2 {
+        font-size: 16px; /* Adjusted font size for smaller screens */
+    }
+    .calculator p {
+        font-size: 12px; /* Adjusted font size for smaller screens */
+    }
+    .calculator i {
+        font-size: 24px; /* Adjusted icon size for smaller screens */
+        top: 5px; /* Adjusted top position for smaller screens */
+        right: 5px; /* Adjusted right position for smaller screens */
+    }
+}
+
+/* Keyframe animations */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade in animation for calculator boxes */
+.calculator {
+    animation: fadeInUp 0.5s ease-in-out;
+}

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InvestMash - Breakout Screener</title>
+<link rel="stylesheet" href="/static/css/screens.css">
+<link rel="stylesheet" href="/static/css/styles.css">
+
+<script src="/static/js/script.js"></script>
+</head>
+<body>
+    <!-- Navbar placeholder -->
+    <div id="navbar-placeholder"></div>
+<h2>Breakout Screener</h2>
+<p>Screener</p>
+
+<div class="search-container">
+  <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for data...">
+</div>
+
+<div id="loading" class="loader"></div>
+
+<table id="csvTable" class="fixed-header" style="display: none;">
+  <!-- Table content will be generated dynamically using JavaScript -->
+</table>
+
+<div id="pagination" class="pagination"></div>
+
+<div class="footer">
+  <!-- Footer content will be generated dynamically using JavaScript -->
+</div>
+
+<div class="visibility-toggle">
+  <label for="toggleColumns">Toggle Columns:</label>
+  <select id="toggleColumns" onchange="toggleColumn()">
+    <!-- Column visibility options will be generated dynamically using JavaScript -->
+  </select>
+</div>
+
+<button onclick="exportToCSV()">Export to CSV</button>
+
+<script>
+  // URL of the CSV file
+  const csvUrl = '/stocks/indscreenscsv/breakout.csv';
+  const rowsPerPage = 10;
+  let currentPage = 1;
+  let totalRows = 0;
+
+  // Function to fetch and display CSV data
+  async function fetchCSV(url) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const csvData = await response.text();
+      const rows = csvData.split('\n');
+
+      // Calculate total number of rows (excluding header)
+      totalRows = rows.length - 1;
+
+      // Create HTML table
+      const table = document.getElementById('csvTable');
+
+      // Add table headers
+      const headers = rows[0].split(',');
+      let headerRow = '<thead><tr>';
+      headers.forEach(header => {
+        headerRow += `<th onclick="sortTable(${headers.indexOf(header)})">${header}<div class="resize" id="resizer${headers.indexOf(header)}"></div></th>`;
+      });
+      headerRow += '</tr></thead>';
+      table.innerHTML += headerRow;
+
+      // Add table data
+      let bodyHTML = '<tbody>';
+      for (let i = 1; i < rows.length; i++) {
+        const rowData = rows[i].split(',');
+        let row = '<tr>';
+        rowData.forEach((cell, index) => {
+          row += `<td data-label="${headers[index]}">${formatData(cell)}</td>`;
+        });
+        row += '</tr>';
+        bodyHTML += row;
+      }
+      bodyHTML += '</tbody>';
+      table.innerHTML += bodyHTML;
+
+      // Display the table, pagination, and column visibility options
+      document.getElementById('loading').style.display = 'none';
+      table.style.display = 'table';
+      renderPagination();
+      addResizableColumns();
+      renderColumnVisibilityOptions(headers);
+    } catch (error) {
+      console.error('Error fetching CSV:', error);
+      // Display error message
+      document.getElementById('loading').innerHTML = 'Error fetching data';
+    }
+  }
+
+  // Fetch and display CSV data
+  fetchCSV(csvUrl);
+
+  // Function to search for data in the table
+  function searchTable() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toUpperCase();
+    const table = document.getElementById('csvTable');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) {
+      const cells = rows[i].getElementsByTagName('td');
+      let found = false;
+      for (let j = 0; j < cells.length; j++) {
+        const cell = cells[j];
+        if (cell) {
+          if (cell.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+      }
+      if (found) {
+        rows[i].style.display = '';
+      } else {
+        rows[i].style.display = 'none';
+      }
+    }
+  }
+
+  // Function to sort table data
+  function sortTable(n) {
+    const table = document.getElementById('csvTable');
+    const rows = table.rows;
+    const switching = true;
+    let shouldSwitch = false;
+    let i = 0;
+    let x, y;
+    let direction = 'asc'; // Set the sorting direction initially to ascending
+
+    // Loop to continue sorting until no switching is needed
+    while (switching) {
+      switching = false;
+      for (i = 1; i < (rows.length - 1); i++) {
+        shouldSwitch = false;
+        x = rows[i].getElementsByTagName('td')[n];
+        y = rows[i + 1].getElementsByTagName('td')[n];
+        if (direction === 'asc') {
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        } else if (direction === 'desc') {
+          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+      }
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      } else {
+        if (direction === 'asc') {
+          direction = 'desc';
+        } else if (direction === 'desc') {
+          direction = 'asc';
+        }
+      }
+    }
+
+    // Remove sorting indicators from all columns
+    const headers = table.querySelectorAll('th');
+    headers.forEach(header => {
+      header.classList.remove('asc', 'desc');
+    });
+
+    // Add sorting indicator to the current column
+    headers[n].classList.add(direction);
+  }
+
+  // Function to render pagination
+  function renderPagination() {
+    const totalPages = Math.ceil(totalRows / rowsPerPage);
+    const pagination = document.getElementById('pagination');
+    let buttons = '';
+
+    for (let i = 1; i <= totalPages; i++) {
+      buttons += `<button onclick="changePage(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
+    }
+
+    pagination.innerHTML = buttons;
+  }
+
+  // Function to change page
+  function changePage(page) {
+    currentPage = page;
+    const table = document.getElementById('csvTable');
+    const rows = table.getElementsByTagName('tr');
+
+    // Calculate start and end index for rows to display on the current page
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+
+    // Hide all rows and show rows for the current page
+    for (let i = 1; i < rows.length; i++) {
+      if (i >= startIndex && i < endIndex) {
+        rows[i].style.display = '';
+      } else {
+        rows[i].style.display = 'none';
+      }
+    }
+
+    // Update active state of pagination buttons
+    const paginationButtons = document.querySelectorAll('.pagination button');
+    paginationButtons.forEach(button => {
+      const pageNumber = parseInt(button.innerText);
+      if (pageNumber === currentPage) {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
+    });
+  }
+
+  // Function to add resizable columns
+  function addResizableColumns() {
+    const table = document.getElementById('csvTable');
+    const headers = table.querySelectorAll('th');
+    let isResizing = false;
+    let startX, startWidth;
+
+    headers.forEach((header, index) => {
+      const resizer = document.getElementById(`resizer${index}`);
+      resizer.addEventListener('mousedown', (event) => {
+        isResizing = true;
+        startX = event.pageX;
+        startWidth = header.offsetWidth;
+      });
+
+      document.addEventListener('mousemove', (event) => {
+        if (isResizing) {
+          const newWidth = startWidth + (event.pageX - startX);
+          header.style.width = newWidth + 'px';
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        isResizing = false;
+      });
+    });
+  }
+
+  // Function to render column visibility options
+  function renderColumnVisibilityOptions(headers) {
+    const toggleColumns = document.getElementById('toggleColumns');
+    headers.forEach((header, index) => {
+      const option = document.createElement('option');
+      option.value = index;
+      option.text = header;
+      option.selected = true;
+      toggleColumns.appendChild(option);
+    });
+  }
+
+  // Function to toggle column visibility
+  function toggleColumn() {
+    const columnIndex = parseInt(document.getElementById('toggleColumns').value);
+    const table = document.getElementById('csvTable');
+    const headers = table.querySelectorAll('th');
+    const cells = table.querySelectorAll(`td:nth-child(${columnIndex + 1}), th:nth-child(${columnIndex + 1})`);
+    const isVisible = headers[columnIndex].style.display !== 'none';
+
+    headers[columnIndex].style.display = isVisible ? 'none' : '';
+    cells.forEach(cell => {
+      cell.style.display = isVisible ? 'none' : '';
+    });
+  }
+
+  // Function to export table data to CSV
+  function exportToCSV() {
+    const table = document.getElementById('csvTable');
+    const rows = table.getElementsByTagName('tr');
+    let csvContent = '';
+
+    // Construct CSV content
+    for (let i = 0; i < rows.length; i++) {
+      const cells = rows[i].getElementsByTagName('td');
+      let row = '';
+      for (let j = 0; j < cells.length; j++) {
+        row += `"${cells[j].innerText.replace(/"/g, '""')}",`;
+      }
+      csvContent += row + '\n';
+    }
+
+    // Create CSV blob and initiate download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'table_data.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+
+  // Function to format numerical data
+  function formatData(data) {
+    // Add comma to separate thousands
+    if (!isNaN(parseFloat(data)) && isFinite(data)) {
+      return parseFloat(data).toLocaleString();
+    }
+    return data;
+  }
+</script>
+
+</body>
+</html>

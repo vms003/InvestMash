@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payback Period Calculator</title>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], input[type="text"], button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* New styles for chart */
+        .chart-container {
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        canvas {
+            max-width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New styles for reset button */
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* New styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Payback Period Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Estimate the period of time required to recoup the initial investment</h2>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="paybackForm">
+                <label for="initialInvestment">Initial Investment (Rupees)</label>
+                <input type="number" id="initialInvestment" placeholder="Enter initial investment amount in rupees" min="0" required>
+                <label for="cashFlows">Cash Flows (Rupees per Year)</label>
+                <input type="text" id="cashFlows" placeholder="Enter comma-separated cash flows per year" required>
+                <button type="button" onclick="calculatePayback()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="paybackResult" class="result"></div>
+            <!-- Chart container -->
+            <section class="chart-container">
+                <canvas id="paybackChart"></canvas>
+            </section>
+            <!-- Reset button -->
+            <button class="reset-btn" onclick="resetForm()">Reset</button>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let paybackChart; // Reference to the chart instance
+
+        function calculatePayback() {
+            const initialInvestment = parseFloat(document.getElementById('initialInvestment').value);
+            const cashFlowsInput = document.getElementById('cashFlows').value;
+            const cashFlows = cashFlowsInput.split(',').map(flow => parseFloat(flow.trim()));
+
+            if (isNaN(initialInvestment) || cashFlows.some(isNaN)) {
+                document.getElementById('error').innerHTML = 'Please enter valid numbers for all fields.';
+                return;
+            }
+
+            const paybackPeriod = calculatePaybackPeriod(initialInvestment, cashFlows);
+
+            document.getElementById('paybackResult').innerHTML = `
+                <p>Payback Period: ${paybackPeriod} years</p>
+            `;
+
+            // Check if the chart instance exists and destroy it
+            if (paybackChart) {
+                paybackChart.destroy();
+            }
+
+            // Generate chart
+            generateChart(initialInvestment, cashFlows, paybackPeriod);
+        }
+
+        function calculatePaybackPeriod(initialInvestment, cashFlows) {
+            let cumulativeCashFlow = initialInvestment;
+            let paybackPeriod = 0;
+
+            for (let i = 0; i < cashFlows.length; i++) {
+                cumulativeCashFlow += cashFlows[i];
+                if (cumulativeCashFlow >= 0) {
+                    paybackPeriod = i + 1;
+                    break;
+                }
+            }
+
+            return paybackPeriod;
+        }
+
+        function generateChart(initialInvestment, cashFlows, paybackPeriod) {
+            const ctx = document.getElementById('paybackChart').getContext('2d');
+
+            const data = {
+                labels: Array.from({ length: cashFlows.length }, (_, i) => `Year ${i + 1}`),
+                datasets: [{
+                    label: 'Cumulative Cash Flow',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    data: calculateCumulativeCashFlows(initialInvestment, cashFlows),
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return '₹' + tooltipItem.yLabel.toFixed(2);
+                        }
+                    }
+                }
+            };
+
+            const config = {
+                type: 'line',
+                data: data,
+                options: options
+            };
+
+            // Create new chart instance
+            paybackChart = new Chart(ctx, config);
+
+            // Highlight payback period
+            highlightPaybackPeriod(paybackPeriod);
+        }
+
+        function calculateCumulativeCashFlows(initialInvestment, cashFlows) {
+            let cumulativeCashFlow = initialInvestment;
+            const cumulativeCashFlows = [initialInvestment];
+
+            cashFlows.forEach(cashFlow => {
+                cumulativeCashFlow += cashFlow;
+                cumulativeCashFlows.push(cumulativeCashFlow);
+            });
+
+            return cumulativeCashFlows;
+        }
+
+        function highlightPaybackPeriod(paybackPeriod) {
+            if (paybackChart) {
+                const chart = paybackChart;
+                const datasets = chart.data.datasets;
+
+                datasets.forEach(dataset => {
+                    const data = dataset.data;
+                    data.forEach((value, index) => {
+                        if (index === paybackPeriod - 1) {
+                            dataset.backgroundColor[index] = 'rgba(255, 99, 132, 0.2)';
+                            dataset.borderColor[index] = 'rgba(255, 99, 132, 1)';
+                        }
+                    });
+                });
+
+                chart.update();
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('paybackForm').reset();
+            document.getElementById('error').innerHTML = '';
+            document.getElementById('paybackResult').innerHTML = '';
+
+            // Check if the chart instance exists and destroy it
+            if (paybackChart) {
+                paybackChart.destroy();
+            }
+        }
+    </script>
+</body>
+</html>

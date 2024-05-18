@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis - {{ stock_name }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #ece9e6, #ffffff);
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            margin: 20px 0;
+            color: #444;
+        }
+
+        h1 {
+            font-size: 2.5em;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #007bff;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #444;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stock-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .stock-header p {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .key-metrics {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+
+        .metric {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 20%;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .table-section {
+            margin-bottom: 50px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 1em;
+            border-radius: 10px;
+            overflow: hidden;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            font-size: 0.95em;
+        }
+
+        td {
+            background-color: #fff;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover td {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        .chart-container {
+            margin-bottom: 50px;
+        }
+
+        .collapsible {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.2em;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .collapsible:after {
+            content: '\002B';
+            color: white;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+
+        .active:after {
+            content: "\2212";
+        }
+
+        .content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .key-metrics {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .metric {
+                width: 80%;
+                margin-bottom: 10px;
+            }
+
+            th, td {
+                text-align: left;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var coll = document.getElementsByClassName("collapsible");
+            for (var i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function () {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            }
+        });
+
+        function createChart(chartId, labels, data, label) {
+            var ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: label
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="stock-header">
+            <h2>{{ stock_name }}</h2>
+            <p>Stock Analysis and Financial Overview</p>
+        </div>
+        <div class="key-metrics">
+            <div class="metric">
+                <p>Current Price</p>
+                <p>{{ data_profit_loss['Price'][-1] }}</p>
+            </div>
+            <div class="metric">
+                <p>Net Profit</p>
+                <p>{{ data_profit_loss['Net profit'][-1] }}</p>
+            </div>
+            <div class="metric">
+                <p>EPS</p>
+                <p>{{ data_profit_loss['EPS'][-1] }}</p>
+            </div>
+            <div class="metric">
+                <p>P/E Ratio</p>
+                <p>{{ data_profit_loss['Price to earning'][-1] }}</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3>Profit & Loss Chart</h3>
+            <canvas id="profitLossChart"></canvas>
+        </div>
+
+        <button type="button" class="collapsible">Profit & Loss Statement</button>
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        {% for date in data_profit_loss['Date'] %}
+                        <th>{{ date }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, values in data_profit_loss.items() %}
+                    {% if key != 'Date' %}
+                    <tr>
+                        <th>{{ key }}</th>
+                        {% for value in values %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <button type="button" class="collapsible">Quarters</button>
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        {% for date in data_quarters['Date'] %}
+                        <th>{{ date }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, values in data_quarters.items() %}
+                    {% if key != 'Date' %}
+                    <tr>
+                        <th>{{ key }}</th>
+                        {% for value in values %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <button type="button" class="collapsible">Cash Flow Statement</button>
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        {% for date in data_cash_flow['Date'] %}
+                        <th>{{ date }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, values in data_cash_flow.items() %}
+                    {% if key != 'Date' %}
+                    <tr>
+                        <th>{{ key }}</th>
+                        {% for value in values %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <button type="button" class="collapsible">Balance Sheet</button>
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        {% for date in data_balance_sheet['Date'] %}
+                        <th>{{ date }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, values in data_balance_sheet.items() %}
+                    {% if key != 'Date' %}
+                    <tr>
+                        <th>{{ key }}</th>
+                        {% for value in values %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Data for the Profit & Loss Chart
+            var profitLossLabels = {{ data_profit_loss['Date']|safe }};
+            var profitLossData = {{ data_profit_loss['Net profit']|safe }};
+            createChart('profitLossChart', profitLossLabels, profitLossData, 'Net Profit');
+        });
+    </script>
+</body>
+</html>

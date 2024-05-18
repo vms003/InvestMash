@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestMash - Your Financial Companion</title>
+    <!-- External CSS libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon/site.webmanifest">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="light">
+    <!-- Navbar placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Main content -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section id="hero" class="animate__animated animate__fadeIn">
+            <div class="hero-content">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Search for a stock">
+                    <div id="suggestion-container"></div>
+                </div>
+                <h1>Empower Your Financial Journey</h1>
+                <p>Discover powerful tools and insights to navigate your finances and investments with confidence.</p>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features">
+            <div class="feature animate__animated animate__fadeInLeft">
+                <img src="/static/images/personal finance.svg" alt="Personal Finance">
+                <h2>Personal Finance</h2>
+                <p>Take control of your finances with our comprehensive suite of calculators and planners.</p>
+                <a href="#" class="btn btn-secondary">Explore</a>
+            </div>
+            <div class="feature animate__animated animate__fadeIn">
+                <img src="/static/images/stock analysis.svg" alt="Stock Analysis">
+                <h2>Stock Analysis</h2>
+                <p>Gain insights into the stock market and make informed investment decisions.</p>
+                <a href="#" class="btn btn-secondary">Explore</a>
+            </div>
+            <div class="feature animate__animated animate__fadeInRight">
+                <img src="/static/images/financial tools.svg" alt="Financial Tools">
+                <h2>Financial Tools</h2>
+                <p>Discover a wide range of financial tools to help you achieve your financial goals.</p>
+                <a href="#" class="btn btn-secondary">Explore</a>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials">
+            <h2>What Our Customers Say</h2>
+            <div class="testimonial-container">
+                <div class="testimonial-slides">
+                    <div class="testimonial">
+                        <p>"InvestMash has been an invaluable resource for managing my investments. The tools are easy to use and provide valuable insights."</p>
+                        <cite>John Doe</cite>
+                    </div>
+                    <div class="testimonial">
+                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                        <cite>Jane Smith</cite>
+                    </div>
+                    <div class="testimonial">
+                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                        <cite>Jane Smith</cite>
+                    </div>                    <div class="testimonial">
+                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                        <cite>Jane Smith</cite>
+                    </div>                    <div class="testimonial">
+                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                        <cite>Jane Smith</cite>
+                    </div>                    <div class="testimonial">
+                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                        <cite>Jane Smith</cite>
+                    </div>                    <div class="testimonial">
+                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                        <cite>Jane Smith</cite>
+                    </div>                    <div class="testimonial">
+                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                        <cite>Jane Smith</cite>
+                    </div>                    <div class="testimonial">
+                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                        <cite>Jane Smith</cite>
+                    </div>                    <div class="testimonial">
+                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                        <cite>Jane Smith</cite>
+                    </div>                    <div class="testimonial">
+                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                        <cite>Jane Smith</cite>
+                    </div>
+                    <!-- Add more testimonials here -->
+                </div>
+                <button class="prev">&#10094;</button>
+                <button class="next">&#10095;</button>
+            </div>
+        </section>
+
+    </div>
+
+
+    <!-- Include the footer -->
+    {% include 'footer.html' %}
+
+    <!-- Custom script -->
+    <script src="/static/js/script.js"></script>
+    <!-- Additional JavaScript for stock analysis -->
+    <script src="/static/js/stock-analysis.js"></script>
+</body>
+</html>

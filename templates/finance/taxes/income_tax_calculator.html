@@ -1,0 +1,194 @@
+<!-- Enhanced Income Tax Calculator -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Tax Calculator</title>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* New styles for chart */
+        .chart-container {
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        canvas {
+            max-width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New styles for reset button */
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* New styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Income Tax Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Estimates income tax liability based on income, deductions, and filing status.</h2>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="taxForm">
+                <label for="income">Annual Income (Rupees)</label>
+                <input type="number" id="income" placeholder="Enter annual income amount in rupees" min="0" required>
+                <label for="deductions">Deductions (Rupees)</label>
+                <input type="number" id="deductions" placeholder="Enter deductions amount in rupees" min="0" required>
+                <label for="filingStatus">Filing Status</label>
+                <select id="filingStatus" required>
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                    <option value="headOfHousehold">Head of Household</option>
+                </select>
+                <button type="button" onclick="calculateTax()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="taxResult" class="result"></div>
+            <!-- Chart container -->
+            <section class="chart-container">
+                <canvas id="taxChart"></canvas>
+            </section>
+            <!-- Reset button -->
+            <button class="reset-btn" onclick="resetForm()">Reset</button>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let taxChart; // Reference to the chart instance
+
+        function calculateTax() {
+            const income = parseFloat(document.getElementById('income').value);
+            const deductions = parseFloat(document.getElementById('deductions').value);
+            const filingStatus = document.getElementById('filingStatus').value;
+
+            if (isNaN(income) || isNaN(deductions)) {
+                document.getElementById('error').innerHTML = 'Please enter valid numbers for income and deductions.';
+                return;
+            }
+
+            let taxLiability = 0;
+
+            // Tax calculation logic based on income, deductions, and filing status
+            // Implement comprehensive tax calculation logic here...
+
+            document.getElementById('taxResult').innerHTML = `
+                <p>Income Tax Liability: ₹${taxLiability.toFixed(2)}</p>
+            `;
+
+            // Check if the chart instance exists and destroy it
+            if (taxChart) {
+                taxChart.destroy();
+            }
+
+            // Generate chart
+            generateChart(income, deductions, filingStatus);
+        }
+
+        function generateChart(income, deductions, filingStatus) {
+            // Chart generation logic
+            // Implement dynamic chart visualization here...
+        }
+
+        function resetForm() {
+            document.getElementById('taxForm').reset();
+            document.getElementById('error').innerHTML = '';
+            document.getElementById('taxResult').innerHTML = '';
+
+            const ctx = document.getElementById('taxChart').getContext('2d');
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+            // Check if the chart instance exists and destroy it
+            if (taxChart) {
+                taxChart.destroy();
+            }
+        }
+    </script>
+</body>
+</html>

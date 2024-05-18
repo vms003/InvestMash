@@ -1,0 +1,720 @@
+/* ----------------------------------------------allscreener.html style---------------------------------------------------------    */
+
+/* Header */
+header {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  header h1 {
+    font-size: 22px;
+  }
+  
+  /* Main Content */
+  main {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-large {
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Breadcrumb */
+  .breadcrumb {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 10px;
+  }
+  
+  .breadcrumb a {
+    color: #9a9a9a;
+    text-decoration: none;
+  }
+  
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Title Styling */
+  .flex-row h1 {
+    
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* Subtitle Styling */
+  .sub {
+    font-size: 12px;
+    color: #777;
+  }
+  
+  /* List Styling */
+  .items {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .items li {
+    margin-bottom: 20px;
+  }
+  
+  .items li a {
+    display: block;
+    padding: 20px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .items li a:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .items li strong {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .items li span {
+    display: block;
+    margin-top: 5px;
+  }
+  
+  /* Pagination */
+  .options {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .options a,
+  .options button {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #333;
+    padding: 10px 15px;
+    margin-right: 5px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+  }
+  
+  .options a:hover,
+  .options button:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .options a.active {
+    background-color: #ff6347;
+    color: #fff;
+  }
+  
+  .options button:disabled {
+    color: #999;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive Adjustments */
+  @media screen and (max-width: 768px) {
+    .flex-row h1 {
+      font-size: 20px;
+    }
+  
+    .sub {
+      font-size: 12px;
+    }
+  
+    .items li a {
+      font-size: 16px;
+    }
+  
+    .breadcrumb {
+      font-size: 12px;
+    }
+  
+    .options a,
+    .options button {
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+  }
+  /*------------------------------------------------------- screener.html------------------------------------------------------ */
+  /* Custom variables for colors */
+:root {
+    --primary-color: #007bff; /* Adjust as needed */
+    --secondary-color: #6c757d; /* Adjust as needed */
+    --ink-900: #343a40; /* Adjust as needed */
+    --border-color: #ced4da; /* Adjust as needed */
+  }
+  
+  /* General styles */
+  body {
+    font-family: Arial, sans-serif; /* Use appropriate font stack */
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* Adjust as needed */
+  }
+  
+  /* Container */
+  .container_screener {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Adjust spacing between sidebar and main */
+  }
+  
+  /* Sidebar */
+  #sidebar {
+    flex: 0 0 400px; /* Sidebar width */
+    box-sizing: border-box;
+    margin-top: 40px;
+    background-color: #f5f5f5;
+    padding-left: 60px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  main {
+    flex: 1; /* Take remaining space */
+    padding: 20px;
+  }
+  
+  /* Sector Section */
+  .sector-section {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-top: 20px; /* Add space above sector section */
+    padding: 20px;
+  }
+  
+  .sector-heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+  }
+  
+  .sector-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .sector-card {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .sector-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .sector-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    text-align: center;
+  }
+  
+  .sector-name {
+    font-size: 18px;
+    color: var(--ink-900);
+    text-align: center;
+  }
+  
+  /* Screen items */
+  .screen-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  
+  .screen-item {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    color: var(--ink-900);
+    font-size: 14px;
+    min-width: 150px;
+    transition: transform 0.3s ease;
+  }
+  
+  .screen-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .screen-item p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+  }
+  
+  /* Buttons */
+  .button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #0056b3; /* Darker shade for hover */
+  }
+  
+  .button-container_screener {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: var(--secondary-color);
+    color: #fff;
+    font-size: 14px;
+  }
+  
+  /* Sidebar heading */
+  #sidebar h2 {
+    padding-left: 15px;
+    padding-top: 25px;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+  }
+  
+  /* Sidebar links */
+  #sidebar a {
+    font-size: 13px;
+    display: block;
+    color: var(--ink-900);
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+  }
+  
+  #sidebar a:hover {
+    color: var(--primary-color);
+  }
+  
+  /* Content */
+  .content {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .section-heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 1024px) {
+    #sidebar {
+      flex: 0 0 200px; /* Reduce sidebar width */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    main {
+      padding: 20px 10px;
+    }
+  
+    .container_screener {
+        flex-direction: column;
+    }
+  
+    #sidebar {
+        width: 100%;
+        margin-bottom: 20px; /* Add some space between sidebar and main on small screens */
+    }
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Apply animation to elements */
+  .screen-item, .content {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  /*---------------------------------------------- rsi-oversold-stocks.html---------------------------------------------------------------- */
+  /* Breadcrumb Styling */
+.breadcrumb {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+  }
+  
+  .breadcrumb a {
+    color: #9a9a9a;
+    text-decoration: none;
+  }
+  
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Button Styling */
+  .button,
+  button,
+  input[type="submit"],
+  input[type="reset"],
+  input[type="button"] {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    color: var(--link);
+    border-color: var(--link);
+    background-color: var(--button-background);
+  }
+  
+  .button:hover,
+  button:hover,
+  input[type="submit"]:hover,
+  input[type="reset"]:hover,
+  input[type="button"]:hover {
+    color: var(--link-hover);
+    border-color: var(--link-hover);
+  }
+  
+  .button:active,
+  button:active,
+  input[type="submit"]:active,
+  input[type="reset"]:active,
+  input[type="button"]:active {
+    color: var(--ink-900);
+    outline: 0;
+  }
+  
+  /* for call to action */
+  .button.button-primary,
+  button.button-primary,
+  input[type="submit"].button-primary,
+  input[type="button"].button-primary,
+  input[type="submit"].razorpay-payment-button {
+    color: #454545;
+    background-color: var(--button-primary);
+    border-color: var(--button-primary);
+  }
+  
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:active,
+  button.button-primary:active,
+  input[type="submit"].button-primary:active,
+  input[type="button"].button-primary:active,
+  input[type="submit"].razorpay-payment-button:active,
+  input[type="submit"].razorpay-payment-button:hover {
+    color: #fff;
+    background-color: var(--button-primary-hover);
+    border-color: var(--button-primary-hover);
+  }
+  
+  /* secondary button for important button inside section */
+  .button.button-secondary,
+  button.button-secondary,
+  input[type="submit"].button-secondary,
+  input[type="button"].button-secondary {
+    color: var(--link);
+    border-color: var(--link);
+    background-color: var(--button-background);
+  }
+  
+  .button.button-secondary:hover,
+  button.button-secondary:hover,
+  input[type="submit"].button-secondary:hover,
+  input[type="button"].button-secondary:hover {
+    color: var(--link-hover);
+    border-color: var(--link-hover);
+    background-color: var(--button-background-hover);
+  }
+  
+  /* Table Styling */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .data-table th,
+  .data-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  .data-table th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .data-table tbody tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  /* Form Styling */
+  .form-field {
+    margin-bottom: 16px;
+  }
+  
+  .form-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .form-field input[type="checkbox"] {
+    margin-right: 8px;
+  }
+  
+  /* Responsive Adjustments */
+  @media screen and (max-width: 768px) {
+    .flex-row h1 {
+      font-size: 20px;
+    }
+  
+    .breadcrumb {
+      font-size: 12px;
+    }
+  
+    .button,
+    button,
+    input[type="submit"],
+    input[type="reset"],
+    input[type="button"] {
+      padding: 8px 16px;
+    }
+  
+    .data-table th,
+    .data-table td {
+      padding: 10px;
+    }
+  }
+    /*------------------------------------------------------- individual screener.html------------------------------------------------------ */
+
+/* General Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Styles */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 36px;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Loading Indicator Styles */
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Pagination Styles */
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 20px;
+  margin: 0 4px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pagination button.active {
+  background-color: #217dbb;
+}
+
+.pagination button:hover:not(.active) {
+  background-color: #2187bb;
+}
+
+/* Search Container Styles */
+.search-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search-container input[type=text] {
+  padding: 15px;
+  width: 60%;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s ease;
+  font-size: 16px;
+}
+
+.search-container input[type=text]:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+/* Footer Styles */
+.footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Visibility Toggle Styles */
+.visibility-toggle {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.visibility-toggle label {
+  font-weight: bold;
+}
+
+.visibility-toggle select {
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+}
+
+/* Export Button Styles */
+button {
+  margin-top: 20px;
+  padding: 15px 30px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: #2187bb;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 768px) {
+  .search-container input[type=text] {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  th, td {
+    padding: 10px;
+  }
+
+  .search-container input[type=text] {
+    width: 100%;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+}
+
+/* Hover Effects */
+button:hover,
+.pagination button:hover:not(.active) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient Background */
+.container {
+  background: linear-gradient(to bottom, #ffffff 0%, #f2f2f2 100%);
+}

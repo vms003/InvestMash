@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Loan Calculator</title>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], select, button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* New styles for amortization schedule */
+        .amortization-table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .amortization-table th, .amortization-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .amortization-table th {
+            background-color: #f2f2f2;
+        }
+
+        /* New styles for reset button */
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* New styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* New styles for information section */
+        .info-section {
+            margin-top: 40px;
+        }
+
+        .info-section h3 {
+            margin-bottom: 10px;
+        }
+
+        .info-section p {
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Auto Loan Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Determine monthly car loan payments</h2>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="loanForm">
+                <label for="principal">Loan Amount (Rupees)</label>
+                <input type="number" id="principal" placeholder="Enter loan amount in rupees" min="0" required>
+                <label for="interest">Annual Interest Rate (%)</label>
+                <input type="number" id="interest" placeholder="Enter annual interest rate" min="0" step="0.01" required>
+                <label for="term">Loan Term (Months)</label>
+                <input type="number" id="term" placeholder="Enter loan term in months" min="0" required>
+                <button type="button" onclick="calculateLoan()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="loanResult" class="result"></div>
+            <!-- Amortization Table -->
+            <table id="amortizationTable" class="amortization-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Payment</th>
+                        <th>Principal</th>
+                        <th>Interest</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <!-- Reset button -->
+            <button class="reset-btn" onclick="resetForm()">Reset</button>
+        </section>
+        <!-- Information section -->
+        <section class="info-section">
+            <h3>About Auto Loan Calculator</h3>
+            <p>
+                The Auto Loan Calculator helps you determine monthly car loan payments based on the loan amount,
+                annual interest rate, and loan term. It also generates an amortization schedule showing payment
+                details for each period.
+            </p>
+        </section>
+    </main>
+    <script>
+        function calculateLoan() {
+            const principal = parseFloat(document.getElementById('principal').value);
+            const interestRate = parseFloat(document.getElementById('interest').value) / 100;
+            const term = parseInt(document.getElementById('term').value);
+
+            if (isNaN(principal) || isNaN(interestRate) || isNaN(term)) {
+                document.getElementById('error').innerHTML = 'Please enter valid numbers for all fields.';
+                return;
+            }
+
+            const monthlyInterestRate = interestRate / 12;
+            const monthlyPayment = (principal * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -term));
+            const totalPayment = monthlyPayment * term;
+
+            document.getElementById('loanResult').innerHTML = `
+                <p>Monthly Payment: ₹${monthlyPayment.toFixed(2)}</p>
+                <p>Total Payment: ₹${totalPayment.toFixed(2)}</p>
+            `;
+
+            generateAmortizationTable(principal, monthlyPayment, monthlyInterestRate, term);
+        }
+
+        function generateAmortizationTable(principal, monthlyPayment, monthlyInterestRate, term) {
+            const table = document.getElementById('amortizationTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            tbody.innerHTML = '';
+
+            let balance = principal;
+            for (let month = 1; month <= term; month++) {
+                const interest = balance * monthlyInterestRate;
+                const principalPaid = monthlyPayment - interest;
+                balance -= principalPaid;
+
+                const row = `
+                    <tr>
+                        <td>${month}</td>
+                        <td>₹${monthlyPayment.toFixed(2)}</td>
+                        <td>₹${principalPaid.toFixed(2)}</td>
+                        <td>₹${interest.toFixed(2)}</td>
+                        <td>₹${balance.toFixed(2)}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            }
+
+            table.style.display = 'block';
+        }
+
+        function resetForm() {
+            document.getElementById('loanForm').reset();
+            document.getElementById('error').innerHTML = '';
+            document.getElementById('loanResult').innerHTML = '';
+            document.getElementById('amortizationTable').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

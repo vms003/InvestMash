@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interest Calculator</title>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* New styles for toggle switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .toggle-container label {
+            margin-right: 8px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input { 
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* New styles for chart */
+        .chart-container {
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        canvas {
+            max-width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New styles for reset button */
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* New styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* New styles for information section */
+        .info-section {
+            margin-top: 40px;
+        }
+
+        .info-section h3 {
+            margin-bottom: 10px;
+        }
+
+        .info-section p {
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Interest Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Calculate interest earned or paid on an investment or loan</h2>
+            <!-- Add toggle switch for monthly/yearly calculation -->
+            <div class="toggle-container">
+                <label for="calculation-type-input">Yearly</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="calculation-type-input">
+                    <span class="slider"></span>
+                </label>
+                <label for="calculation-type-input">Monthly</label>
+            </div>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="interestForm">
+                <label for="principal">Principal (Rupees)</label>
+                <input type="number" id="principal" placeholder="Enter principal amount in rupees" min="0" required>
+                <label for="rate">Annual Interest Rate (%)</label>
+                <input type="number" id="rate" placeholder="Enter annual interest rate" min="0" required>
+                <label for="time">Time Duration (Years)</label>
+                <input type="number" id="time" placeholder="Enter time duration in years" min="0" required>
+                <button type="button" onclick="calculateInterest()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="interestResult" class="result"></div>
+            <!-- Reset button -->
+            <button class="reset-btn" onclick="resetForm()">Reset</button>
+        </section>
+        <!-- Chart container -->
+        <section class="chart-container">
+            <canvas id="interestChart"></canvas>
+        </section>
+        <!-- Information section -->
+        <section class="info-section">
+            <h3>About Interest Calculator</h3>
+            <p>
+                The Interest Calculator helps you estimate the interest earned or paid on an investment or loan. 
+                Simply input the principal amount, the annual interest rate, and the time duration to calculate 
+                the total amount including interest. You can choose to calculate interest on a monthly or yearly basis.
+            </p>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let myChart; // Reference to the chart instance
+
+        function calculateInterest() {
+            const principal = parseFloat(document.getElementById('principal').value);
+            const rate = parseFloat(document.getElementById('rate').value);
+            const time = parseFloat(document.getElementById('time').value);
+            const calculationType = document.getElementById('calculation-type-input').checked ? 'monthly' : 'yearly';
+
+            if (isNaN(principal) || isNaN(rate) || isNaN(time)) {
+                document.getElementById('error').innerHTML = 'Please enter valid numbers for all fields.';
+                return;
+            }
+
+            const interestRate = rate / 100;
+            let totalAmount;
+            let totalInterest;
+
+            if (calculationType === 'yearly') {
+                totalInterest = principal * interestRate * time;
+                totalAmount = principal + totalInterest;
+            } else {
+                totalInterest = principal * interestRate * (time / 12);
+                totalAmount = principal + totalInterest;
+            }
+
+            document.getElementById('interestResult').innerHTML = `
+                <p>Total Interest: ₹${totalInterest.toFixed(2)}</p>
+                <p>Total Amount: ₹${totalAmount.toFixed(2)}</p>
+            `;
+
+            // Check if the chart instance exists and destroy it
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            // Generate chart
+            generateChart(principal, interestRate, time, calculationType);
+        }
+
+        function generateChart(principal, interestRate, time, calculationType) {
+            const ctx = document.getElementById('interestChart').getContext('2d');
+            const chartType = calculationType === 'yearly' ? 'Yearly Interest Growth' : 'Monthly Interest Growth';
+
+            const data = {
+                labels: calculateLabels(calculationType, time),
+                datasets: [{
+                    label: 'Interest',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    data: calculateInterestData(principal, interestRate, time, calculationType),
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return 'Interest: ₹' + tooltipItem.yLabel.toFixed(2);
+                        }
+                    }
+                }
+            };
+
+            const config = {
+                type: 'line',
+                data: data,
+                options: options
+            };
+
+            // Create new chart instance
+            myChart = new Chart(ctx, config);
+        }
+
+        function calculateLabels(calculationType, time) {
+            const labels = [];
+            const labelPrefix = calculationType === 'yearly' ? 'Year' : 'Month';
+            for (let i = 1; i <= time; i++) {
+                labels.push(labelPrefix + ' ' + i);
+            }
+            return labels;
+        }
+
+        function calculateInterestData(principal, interestRate, time, calculationType) {
+            const interestData = [];
+            let totalInterest = 0;
+
+            for (let i = 1; i <= time; i++) {
+                let monthlyInterest;
+                if (calculationType === 'yearly') {
+                    monthlyInterest = principal * interestRate;
+                } else {
+                    monthlyInterest = principal * interestRate / 12;
+                }
+                totalInterest += monthlyInterest;
+                interestData.push(totalInterest.toFixed(2));
+            }
+            return interestData;
+        }
+
+        function resetForm() {
+            document.getElementById('interestForm').reset();
+            document.getElementById('error').innerHTML = '';
+            document.getElementById('interestResult').innerHTML = '';
+            const ctx = document.getElementById('interestChart').getContext('2d');
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+            // Check if the chart instance exists and destroy it
+            if (myChart) {
+                myChart.destroy();
+            }
+        }
+    </script>
+</body>
+</html>

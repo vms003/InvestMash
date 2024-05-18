@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Payday Loan Calculator</title>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* Additional styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* Additional styles for chart container */
+        .chart-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Additional styles for amortization schedule table */
+        .amortization-table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .amortization-table th, .amortization-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .amortization-table th {
+            background-color: #f2f2f2;
+        }
+
+        /* Additional styles for comparison table */
+        .comparison-table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .comparison-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Enhanced Payday Loan Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Calculate fees and interest for payday loans</h2>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="loanForm">
+                <label for="loanAmount">Loan Amount (Rupees)</label>
+                <input type="number" id="loanAmount" placeholder="Enter loan amount" min="0" required>
+                <label for="repaymentPeriod">Repayment Period (Days)</label>
+                <input type="number" id="repaymentPeriod" placeholder="Enter repayment period in days" min="1" required>
+                <label for="interestRate">Interest Rate (%)</label>
+                <input type="number" id="interestRate" placeholder="Enter interest rate" min="0" step="0.01" required>
+                <button type="button" onclick="calculateLoan()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="loanResult" class="result"></div>
+            <!-- Chart container -->
+            <section class="chart-container">
+                <canvas id="loanChart"></canvas>
+            </section>
+            <!-- Amortization schedule table -->
+            <h3>Amortization Schedule</h3>
+            <table id="amortizationTable" class="amortization-table"></table>
+            <!-- Loan comparison table -->
+            <h3>Loan Comparison</h3>
+            <table id="comparisonTable" class="comparison-table"></table>
+        </section>
+        <!-- Information section -->
+        <section class="info-section">
+            <h3>About Enhanced Payday Loan Calculator</h3>
+            <p>
+                The Enhanced Payday Loan Calculator allows you to calculate fees and interest for payday loans with advanced features
+                such as dynamic fee and interest rates, loan comparison, amortization schedule, interactive graphs, and loan refinancing options.
+            </p>
+        </section>
+    </main>
+    <script>
+        function calculateLoan() {
+            // Clear previous results and error message
+            document.getElementById('loanResult').innerHTML = '';
+            document.getElementById('error').innerHTML = '';
+
+            // Get user inputs
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const repaymentPeriod = parseInt(document.getElementById('repaymentPeriod').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+
+            // Validate inputs
+            if (isNaN(loanAmount) || isNaN(repaymentPeriod) || isNaN(interestRate)) {
+                document.getElementById('error').innerHTML = 'Please enter valid numbers for all fields.';
+                return;
+            }
+
+            // Calculate loan details
+            const totalInterest = (loanAmount * interestRate * repaymentPeriod) / 36500;
+            const totalAmount = loanAmount + totalInterest;
+            const monthlyPayment = totalAmount / repaymentPeriod;
+
+            // Display loan details
+            document.getElementById('loanResult').innerHTML = `
+                <p>Total Interest: ₹${totalInterest.toFixed(2)}</p>
+                <p>Total Amount Due: ₹${totalAmount.toFixed(2)}</p>
+                <p>Monthly Payment: ₹${monthlyPayment.toFixed(2)}</p>
+            `;
+
+            // Calculate and display amortization schedule
+            displayAmortizationSchedule(loanAmount, totalInterest, repaymentPeriod);
+
+            // Calculate and display loan comparison
+            displayLoanComparison();
+        }
+
+        function displayAmortizationSchedule(loanAmount, totalInterest, repaymentPeriod) {
+            const table = document.getElementById('amortizationTable');
+            table.innerHTML = `
+                <tr>
+                    <th>Payment #</th>
+                    <th>Payment Amount</th>
+                    <th>Principal</th>
+                    <th>Interest</th>
+                    <th>Remaining Balance</th>
+                </tr>
+            `;
+            let remainingBalance = loanAmount;
+            const monthlyPayment = (loanAmount + totalInterest) / repaymentPeriod;
+            for (let i = 1; i <= repaymentPeriod; i++) {
+                const interestPayment = remainingBalance * (totalInterest / repaymentPeriod);
+                const principalPayment = monthlyPayment - interestPayment;
+                remainingBalance -= principalPayment;
+                table.innerHTML += `
+                    <tr>
+                        <td>${i}</td>
+                        <td>₹${monthlyPayment.toFixed(2)}</td>
+                        <td>₹${principalPayment.toFixed(2)}</td>
+                        <td>₹${interestPayment.toFixed(2)}</td>
+                        <td>₹${remainingBalance.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+        }
+
+        function displayLoanComparison() {
+            // Implement loan comparison logic here
+        }
+    </script>
+</body>
+</html>

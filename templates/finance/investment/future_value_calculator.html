@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Value Calculator</title>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* New styles for chart */
+        .chart-container {
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        canvas {
+            max-width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New styles for reset button */
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* New styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Future Value Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Estimate future value of an investment or savings</h2>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="futureValueForm">
+                <label for="initialAmount">Initial Amount (Rupees)</label>
+                <input type="number" id="initialAmount" placeholder="Enter initial amount in rupees" min="0" required>
+                <label for="interestRate">Annual Interest Rate (%)</label>
+                <input type="number" id="interestRate" placeholder="Enter annual interest rate" min="0" required>
+                <label for="timePeriod">Time Period (Years)</label>
+                <input type="number" id="timePeriod" placeholder="Enter time period in years" min="0" required>
+                <button type="button" onclick="calculateFutureValue()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="futureValueResult" class="result"></div>
+            <!-- Chart container -->
+            <section class="chart-container">
+                <canvas id="futureValueChart"></canvas>
+            </section>
+            <!-- Reset button -->
+            <button class="reset-btn" onclick="resetForm()">Reset</button>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let futureValueChart; // Reference to the chart instance
+
+        function calculateFutureValue() {
+            const initialAmount = parseFloat(document.getElementById('initialAmount').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+            const timePeriod = parseFloat(document.getElementById('timePeriod').value);
+
+            if (isNaN(initialAmount) || isNaN(interestRate) || isNaN(timePeriod)) {
+                document.getElementById('error').innerHTML = 'Please enter valid numbers for all fields.';
+                return;
+            }
+
+            const futureValue = initialAmount * Math.pow(1 + (interestRate / 100), timePeriod);
+
+            document.getElementById('futureValueResult').innerHTML = `
+                <p>Future Value: ₹${futureValue.toFixed(2)}</p>
+            `;
+
+            // Check if the chart instance exists and destroy it
+            if (futureValueChart) {
+                futureValueChart.destroy();
+            }
+
+            // Generate chart
+            generateChart(initialAmount, interestRate, timePeriod);
+        }
+
+        function generateChart(initialAmount, interestRate, timePeriod) {
+            const ctx = document.getElementById('futureValueChart').getContext('2d');
+
+            const data = {
+                labels: ['Initial Amount'],
+                datasets: [{
+                    label: 'Future Value',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    data: [initialAmount],
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return '₹' + tooltipItem.yLabel.toFixed(2);
+                        }
+                    }
+                }
+            };
+
+            const config = {
+                type: 'bar',
+                data: data,
+                options: options
+            };
+
+            // Create new chart instance
+            futureValueChart = new Chart(ctx, config);
+        }
+
+        function resetForm() {
+            document.getElementById('futureValueForm').reset();
+            document.getElementById('error').innerHTML = '';
+            document.getElementById('futureValueResult').innerHTML = '';
+
+            // Check if the chart instance exists and destroy it
+            if (futureValueChart) {
+                futureValueChart.destroy();
+            }
+        }
+    </script>
+</body>
+</html>

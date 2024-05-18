@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Interest Calculator</title>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* New styles for chart */
+        .chart-container {
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        canvas {
+            max-width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New styles for reset button */
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* New styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Simple Interest Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Calculate interest earned or paid on a principal amount using simple interest formula</h2>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="simpleInterestForm">
+                <label for="principal">Principal Amount (Rupees)</label>
+                <input type="number" id="principal" placeholder="Enter principal amount in rupees" min="0" required>
+                <label for="rate">Annual Interest Rate (%)</label>
+                <input type="number" id="rate" placeholder="Enter annual interest rate" min="0" required>
+                <label for="time">Time Duration (Years)</label>
+                <input type="number" id="time" placeholder="Enter time duration in years" min="0" required>
+                <button type="button" onclick="calculateSimpleInterest()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="simpleInterestResult" class="result"></div>
+            <!-- Reset button -->
+            <button class="reset-btn" onclick="resetForm()">Reset</button>
+        </section>
+        <!-- Chart container -->
+        <section class="chart-container">
+            <canvas id="simpleInterestChart"></canvas>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let myChart; // Reference to the chart instance
+
+        function calculateSimpleInterest() {
+            const principal = parseFloat(document.getElementById('principal').value);
+            const rate = parseFloat(document.getElementById('rate').value);
+            const time = parseFloat(document.getElementById('time').value);
+
+            if (isNaN(principal) || isNaN(rate) || isNaN(time)) {
+                document.getElementById('error').innerHTML = 'Please enter valid numbers for all fields.';
+                return;
+            }
+
+            const interest = (principal * rate * time) / 100;
+
+            document.getElementById('simpleInterestResult').innerHTML = `
+                <p>Simple Interest: ₹${interest.toFixed(2)}</p>
+            `;
+
+            // Check if the chart instance exists and destroy it
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            // Generate chart
+            generateChart(principal, rate, time);
+        }
+
+        function generateChart(principal, rate, time) {
+            const ctx = document.getElementById('simpleInterestChart').getContext('2d');
+
+            const data = {
+                labels: ['Principal', 'Interest'],
+                datasets: [{
+                    label: 'Amount',
+                    backgroundColor: ['#007bff', '#28a745'],
+                    data: [principal, (principal * rate * time) / 100],
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Principal vs. Interest',
+                },
+            };
+
+            const config = {
+                type: 'pie',
+                data: data,
+                options: options,
+            };
+
+            // Create new chart instance
+            myChart = new Chart(ctx, config);
+        }
+
+        function resetForm() {
+            document.getElementById('simpleInterestForm').reset();
+            document.getElementById('error').innerHTML = '';
+            document.getElementById('simpleInterestResult').innerHTML = '';
+            const ctx = document.getElementById('simpleInterestChart').getContext('2d');
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+            // Check if the chart instance exists and destroy it
+            if (myChart) {
+                myChart.destroy();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - InvestMash</title>
+    <!-- External CSS libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon/site.webmanifest">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+     <script src="/static/js/script.js"></script>
+    <style>
+/* styles.css */
+
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    color: #333;
+}
+
+p {
+    color: #666;
+}
+
+/* Login Page Styles */
+.login-section {
+    background-color: #fff;
+    padding: 50px 0;
+    text-align: center;
+}
+
+.login-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 10px;
+    text-align: left;
+    font-weight: bold;
+    color: #333; /* Match the color with the theme */
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus {
+    border-color: #4CAF50; /* Match the focus color with the theme */
+    outline: none;
+}
+
+.login-form button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.login-form button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.error-message {
+    color: #f44336;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Forgot Password and Sign Up Links */
+.login-form a {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.login-form a:hover {
+    color: #4CAF50;
+}
+
+/* Additional Enhancements */
+@media (max-width: 480px) {
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        width: calc(100% - 20px);
+    }
+}
+
+    </style>
+</head>
+<body>
+    <!-- Navbar placeholder -->
+    <div id="navbar-placeholder"></div>
+    <section class="login-section">
+        <div class="container">
+            <h2>Login</h2>
+            
+            <div class="login-form">
+                <form id="loginForm" action="/login" method="post">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    
+                    <button type="submit">Login</button>
+                </form>
+                
+                <div id="errorMessage" class="error-message" style="display: none;">Incorrect username or password. Please try again.</div>
+    
+                <!-- Forgot Password -->
+                <p><a href="/forgot-password">Forgot your password?</a></p>
+    
+                <!-- Sign Up -->
+                <p>Don't have an account? <a href="/signup">Sign up</a></p>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // Client-side validation and form submission handling
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+    
+            // Example of basic client-side validation
+            if (username.trim() === "" || password.trim() === "") {
+                alert("Please fill in both username and password fields.");
+                return;
+            }
+    
+            // Assuming you're using Fetch API for AJAX requests
+            fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "/dashboard"; // Redirect to dashboard on successful login
+                } else {
+                    document.getElementById("errorMessage").style.display = "block";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                document.getElementById("errorMessage").style.display = "block";
+            });
+        });
+    </script>
+    
+    </body>
+    </html>

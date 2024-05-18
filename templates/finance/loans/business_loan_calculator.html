@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Loan Calculator</title>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* New styles for chart */
+        .chart-container {
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        canvas {
+            max-width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New styles for reset button */
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* New styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* New styles for information section */
+        .info-section {
+            margin-top: 40px;
+        }
+
+        .info-section h3 {
+            margin-bottom: 10px;
+        }
+
+        .info-section p {
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Business Loan Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Calculate monthly payments and total interest for business loans</h2>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="loanForm">
+                <label for="loanAmount">Loan Amount (Rupees)</label>
+                <input type="number" id="loanAmount" placeholder="Enter loan amount" min="0" required>
+                <label for="annualInterestRate">Annual Interest Rate (%)</label>
+                <input type="number" id="annualInterestRate" placeholder="Enter annual interest rate" min="0" step="0.01" required>
+                <label for="loanTerm">Loan Term (Months)</label>
+                <input type="number" id="loanTerm" placeholder="Enter loan term in months" min="0" required>
+                <label for="additionalFees">Additional Fees (Rupees)</label>
+                <input type="number" id="additionalFees" placeholder="Enter additional fees" min="0">
+                <label for="additionalPayments">Additional Monthly Payments (Rupees)</label>
+                <input type="number" id="additionalPayments" placeholder="Enter additional monthly payments" min="0">
+                <button type="button" onclick="calculateLoan()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="loanResult" class="result"></div>
+            <!-- Reset button -->
+            <button class="reset-btn" onclick="resetForm()">Reset</button>
+        </section>
+        <!-- Chart container -->
+        <section class="chart-container">
+            <canvas id="loanChart"></canvas>
+        </section>
+        <!-- Information section -->
+        <section class="info-section">
+            <h3>About Business Loan Calculator</h3>
+            <p>
+                The Business Loan Calculator helps you calculate the monthly payments and total interest for business loans based on the loan amount,
+                annual interest rate, loan term, and additional fees or payments. It also displays a chart showing the loan amortization schedule.
+            </p>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let myChart; // Reference to the chart instance
+
+        function calculateLoan() {
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const annualInterestRate = parseFloat(document.getElementById('annualInterestRate').value);
+            const loanTerm = parseFloat(document.getElementById('loanTerm').value);
+            const additionalFees = parseFloat(document.getElementById('additionalFees').value) || 0;
+            const additionalPayments = parseFloat(document.getElementById('additionalPayments').value) || 0;
+
+            if (isNaN(loanAmount) || isNaN(annualInterestRate) || isNaN(loanTerm)) {
+                document.getElementById('error').innerHTML = 'Please enter valid numbers for all fields.';
+                return;
+            }
+
+            const monthlyInterestRate = annualInterestRate / 12 / 100;
+            const totalLoanAmount = loanAmount + additionalFees;
+            const monthlyPayment = calculateMonthlyPayment(totalLoanAmount, monthlyInterestRate, loanTerm, additionalPayments);
+
+            document.getElementById('error').innerHTML = '';
+
+            const totalInterestPaid = (monthlyPayment * loanTerm) - totalLoanAmount;
+            const totalPayment = monthlyPayment * loanTerm;
+
+            document.getElementById('loanResult').innerHTML = `
+                <p>Monthly Payment: ₹${monthlyPayment.toFixed(2)}</p>
+                <p>Total Interest Paid: ₹${totalInterestPaid.toFixed(2)}</p>
+                <p>Total Payment: ₹${totalPayment.toFixed(2)}</p>
+            `;
+
+            // Check if the chart instance exists and destroy it
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            // Generate chart
+            generateChart(loanAmount, annualInterestRate, loanTerm, monthlyPayment, additionalPayments);
+        }
+
+        function calculateMonthlyPayment(loanAmount, monthlyInterestRate, loanTerm, additionalPayments) {
+            const monthlyPayment = (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -loanTerm));
+            return monthlyPayment + additionalPayments;
+        }
+
+        function generateChart(loanAmount, annualInterestRate, loanTerm, monthlyPayment, additionalPayments) {
+            const ctx = document.getElementById('loanChart').getContext('2d');
+
+            const labels = [];
+            const data = [];
+
+            let remainingLoan = loanAmount;
+            for (let i = 1; i <= loanTerm; i++) {
+                labels.push(`Month ${i}`);
+                remainingLoan -= (monthlyPayment - additionalPayments - (remainingLoan * annualInterestRate / 12 / 100));
+                data.push(remainingLoan);
+            }
+
+            const chartData = {
+                labels: labels,
+                datasets: [{
+                    label: 'Remaining Loan Amount (Rupees)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    data: data,
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(value, index, values) {
+                                return '₹' + value.toFixed(2);
+                            }
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return 'Remaining Loan: ₹' + tooltipItem.yLabel.toFixed(2);
+                        }
+                    }
+                }
+            };
+
+            const config = {
+                type: 'line',
+                data: chartData,
+                options: options
+            };
+
+            // Create new chart instance
+            myChart = new Chart(ctx, config);
+        }
+
+        function resetForm() {
+            document.getElementById('loanForm').reset();
+            document.getElementById('error').innerHTML = '';
+            document.getElementById('loanResult').innerHTML = '';
+            const ctx = document.getElementById('loanChart').getContext('2d');
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+            // Check if the chart instance exists and destroy it
+            if (myChart) {
+                myChart.destroy();
+            }
+        }
+    </script>
+</body>
+</html>

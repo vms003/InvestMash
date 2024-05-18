@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Fund Calculator</title>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], input[type="radio"], button {
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* New styles for reset button */
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* New styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Emergency Fund Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Calculate the amount needed for your emergency fund</h2>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="emergencyFundForm">
+                <label for="monthlyExpenses">Monthly Expenses (Rupees)</label>
+                <input type="number" id="monthlyExpenses" placeholder="Enter your monthly expenses" min="0" required>
+                <label>Risk Tolerance:</label>
+                <label for="lowRisk">
+                    <input type="radio" id="lowRisk" name="riskTolerance" value="low"> Low
+                </label>
+                <label for="mediumRisk">
+                    <input type="radio" id="mediumRisk" name="riskTolerance" value="medium" checked> Medium
+                </label>
+                <label for="highRisk">
+                    <input type="radio" id="highRisk" name="riskTolerance" value="high"> High
+                </label>
+                <button type="button" onclick="calculateEmergencyFund()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="emergencyFundResult" class="result"></div>
+        </section>
+    </main>
+    <script>
+        function calculateEmergencyFund() {
+            const monthlyExpenses = parseFloat(document.getElementById('monthlyExpenses').value);
+            const riskTolerance = document.querySelector('input[name="riskTolerance"]:checked').value;
+
+            if (isNaN(monthlyExpenses)) {
+                document.getElementById('error').innerHTML = 'Please enter a valid number for monthly expenses.';
+                return;
+            }
+
+            let emergencyFundMultiplier;
+            switch (riskTolerance) {
+                case 'low':
+                    emergencyFundMultiplier = 3;
+                    break;
+                case 'medium':
+                    emergencyFundMultiplier = 6;
+                    break;
+                case 'high':
+                    emergencyFundMultiplier = 9;
+                    break;
+            }
+
+            const emergencyFundAmount = monthlyExpenses * emergencyFundMultiplier;
+
+            document.getElementById('emergencyFundResult').innerHTML = `
+                <p>Recommended Emergency Fund Amount: ₹${emergencyFundAmount.toFixed(2)}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Calculator</title>
+    <style>
+        /* Styles for header, main, and form */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* New styles for chart */
+        .chart-container {
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        canvas {
+            max-width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New styles for reset button */
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* New styles for error message */
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Budget Calculator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Calculate monthly or yearly budgets based on income and expenses</h2>
+            <!-- Error message -->
+            <p id="error" class="error"></p>
+            <!-- Form -->
+            <form id="budgetForm">
+                <label for="income">Income (Rupees)</label>
+                <input type="number" id="income" placeholder="Enter total income amount" min="0" required>
+                <label for="expenses">Expenses (Rupees)</label>
+                <input type="number" id="expenses" placeholder="Enter total expenses amount" min="0" required>
+                <label for="duration">Duration (Months/Year)</label>
+                <input type="number" id="duration" placeholder="Enter duration in months or years" min="0" required>
+                <button type="button" onclick="calculateBudget()">Calculate</button>
+            </form>
+            <!-- Result -->
+            <div id="budgetResult" class="result"></div>
+            <!-- Chart container -->
+            <section class="chart-container">
+                <canvas id="budgetChart"></canvas>
+            </section>
+            <!-- Reset button -->
+            <button class="reset-btn" onclick="resetForm()">Reset</button>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let budgetChart; // Reference to the chart instance
+
+        function calculateBudget() {
+            const income = parseFloat(document.getElementById('income').value);
+            const expenses = parseFloat(document.getElementById('expenses').value);
+            const duration = parseFloat(document.getElementById('duration').value);
+
+            if (isNaN(income) || isNaN(expenses) || isNaN(duration)) {
+                document.getElementById('error').innerHTML = 'Please enter valid numbers for all fields.';
+                return;
+            }
+
+            const monthlyIncome = income / duration;
+            const monthlyExpenses = expenses / duration;
+            const monthlyBudget = monthlyIncome - monthlyExpenses;
+            const yearlyBudget = monthlyBudget * 12;
+
+            document.getElementById('budgetResult').innerHTML = `
+                <p>Monthly Budget: ₹${monthlyBudget.toFixed(2)}</p>
+                <p>Yearly Budget: ₹${yearlyBudget.toFixed(2)}</p>
+            `;
+
+            // Check if the chart instance exists and destroy it
+            if (budgetChart) {
+                budgetChart.destroy();
+            }
+
+            // Generate chart
+            generateChart(monthlyBudget, yearlyBudget);
+        }
+
+        function generateChart(monthlyBudget, yearlyBudget) {
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+
+            const data = {
+                labels: ['Monthly Budget', 'Yearly Budget'],
+                datasets: [{
+                    label: 'Budget (Rupees)',
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1,
+                    data: [monthlyBudget, yearlyBudget],
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            };
+
+            const config = {
+                type: 'bar',
+                data: data,
+                options: options
+            };
+
+            // Create new chart instance
+            budgetChart = new Chart(ctx, config);
+        }
+
+        function resetForm() {
+            document.getElementById('budgetForm').reset();
+            document.getElementById('error').innerHTML = '';
+            document.getElementById('budgetResult').innerHTML = '';
+
+            // Check if the chart instance exists and destroy it
+            if (budgetChart) {
+                budgetChart.destroy();
+            }
+        }
+    </script>
+</body>
+</html>

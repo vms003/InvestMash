@@ -1,5 +1,87 @@
-/* Hero Section */
+/* General layout styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.homecontainer {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.heading{
+    text-align: center;
+    background-color: #343a40;
+    border-radius: 5px;
+}
+/* Sidebar styles */
+.sidebar {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 200px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+.sidebargainer{
+    border-radius: 8px;
+    color: green;
+    border-left: 5px solid green;
+}
+
+/* Specific styling for Losers */
+.sidebarloser{
+    border-radius: 8px;
+    color: red;
+    border-left: 5px solid red;
+}
+
+/* Styling for Most Active */
+.sidebar.right {
+    order: 2;
+}
+
+.sidebar.right ul li {
+    color: #000;
+    border-left: 5px solid #000;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    font-size: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #e9ecef;
+    color: #495057;
+}
+
+.sidebar li:last-child {
+    border-bottom: none;
+}
+
+/* Main content styles */
 #hero {
+    flex-grow: 1;
     position: relative;
     background-color: #007bff;
     color: #fff;
@@ -7,6 +89,10 @@
     text-align: center;
     border-radius: 20px;
     overflow: hidden;
+    margin-bottom: 20px;
+    max-height: 350px;
+    background-image: url('/static/images/indexbg.png');
+    
 }
 
 .hero-content {
@@ -42,12 +128,15 @@
 h1 {
     font-size: 36px;
     margin-bottom: 20px;
+    color: skyblue;
 }
 
 p {
     font-size: 20px;
     line-height: 1.6;
     margin-bottom: 30px; /* Add space below paragraph */
+    color: white;
+
 }
 
 /* Button */
@@ -85,6 +174,11 @@ p {
 
 /* Responsive Styling */
 @media screen and (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
     .hero-content {
         padding: 50px 20px;
     }
@@ -99,6 +193,11 @@ p {
 
     #search-input {
         width: calc(100% - 80px);
+    }
+
+    .sidebar {
+        width: 100%;
+        margin-bottom: 20px;
     }
 }
 
@@ -165,17 +264,17 @@ p {
     opacity: 0;
 }
 
-
-
 /* Features Section */
 #features {
+    padding: 5%;
     display: flex;
-    justify-content: space-between;
+    justify-content:center;
     gap: 30px;
     margin-bottom: 60px;
 }
 
 .feature {
+    max-width: 250px;
     position: relative;
     flex: 1;
     padding: 40px;
@@ -343,7 +442,6 @@ p {
     }
 }
 
-
 /* Footer */
 .footer {
     background-color: #333;
@@ -351,7 +449,7 @@ p {
     padding: 50px 0;
 }
 
-.container {
+.footer .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;

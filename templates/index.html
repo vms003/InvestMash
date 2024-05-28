@@ -18,24 +18,220 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
 </head>
 <body class="light">
     <!-- Navbar placeholder -->
-    <div id="navbar-placeholder"></div>
+    <nav class="u-full-width no-print">
+        <!-- Mobile Navigation Holder -->
+        <div class="mobile-nav">
+            <!-- Logo -->
+            <div class="logo-holder">
+                <a href="{{ url_for('index') }}" class="logo-holder">
+                    <img alt="InvestMash" class="logo" src="/static/favicon/InvestMash.png"/>
+                </a>            
+            </div>
+            <!-- Menu Icon -->
+            <div class="menu-icon" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <!-- Mobile Navigation Content -->
+            <div id="mobile-menu" class="mobile-menu">
+                <!-- Navigation Links -->
+                <div class="mobile-links">
+                    <a href="{{ url_for('index') }}">Home</a>
+                    <a href="{{ url_for('explore_screener') }}">Screens</a>
+                    <a href="/finance/personal_finance.html">Personal Finance</a>
+                    <a href="/contact.html">Contact</a>
+                    <a href="/login/indexd41d.html?">Login</a>
+                    <a href="/register/indexd41d.html?">Sign Up</a>
+                </div>
+    
+            </div>
+        </div>
+        <!-- Top Navigation Holder (for desktop) -->
+        <div class="top-nav-holder">
+            <div class="container">
+                <div class="layer-holder top-navigation">
+                    <div class="layer flex flex-space-between" style="align-items: center; height: 50px">
+                        <!-- Logo -->
+                        <a href="{{ url_for('index') }}" class="logo-holder">
+                                <img alt="InvestMash" class="logo" src="/static/favicon/InvestMash.png"/>
+                        </a>                    
+    
+                        <!-- Menu Items -->
+                        <div class="desktop-links">
+                            <a href="{{ url_for('index') }}">Home</a>
+                            <a href="{{ url_for('explore_screener') }}">Screens</a>
+                            <div class="dropdown-menu">
+                                <button class="button-plain" type="button" onclick="toggleDropdown(event)">
+                                    Personal Finance
+                                    <i class="icon-down"></i>
+                                </button>
+                                <ul class="dropdown-content flex-column tools-menu" style="width: 350px" id="nav-tools-menu">
+                                    <li>
+                                        <a href="/finance/investment.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/investment.svg" alt="Investment Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14" style="font-weight: 850;font-size: 15px;">Investment Calculator</div>
+                                                <div class="sub font-size-13" style="font-size: 12px;">Calculate interest, returns, savings, etc.</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    
+                                    <!-- Budgeting and Saving -->
+                                    <li>
+                                        <a href="/finance/budgeting_saving.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/saving and budgeting.svg" alt="Budgeting and Saving Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14" style="font-weight: 850;font-size: 15px;">Budgeting and Saving Calculator</div>
+                                                <div class="sub font-size-13" style="font-size: 12px;">Manage your budget and savings goals</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- Loans -->
+                                    <li>
+                                        <a href="/finance/loans.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/loan.svg" alt="Loans Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Loans Calculator</div>
+                                                <div class="sub font-size-13"style="font-size: 12px;">Calculate different types of loans</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- Insurance -->
+                                    <li>
+                                        <a href="/finance/insurance.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/insurance.svg" alt="Insurance Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Insurance Calculator</div>
+                                                <div class="sub font-size-13"style="font-size: 12px;">Estimate insurance coverage and premiums</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- Mortgages and Real Estate -->
+                                    <li>
+                                        <a href="/finance/mortgage_real_estate_calculator.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/mortgage.svg" alt="Mortgage and Real Estate Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14" style="font-weight: 850;font-size: 15px;">Mortgage and Real Estate Calculator</div>
+                                                <div class="sub font-size-13" style="font-size: 12px;">Calculate mortgage payments, rates, house affordability, etc.</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    
+                                
+                                    <!-- Student Loans -->
+                                    <li>
+                                        <a href="/finance/student_loans.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/student.svg" alt="Student Loans Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Student Loans Calculator</div>
+                                                <div class="sub font-size-13"style="font-size: 12px;">Estimate student loan payments and options</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- Taxes -->
+                                    <li>
+                                        <a href="/finance/taxes.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/tax.svg" alt="Taxes Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Taxes Calculator</div>
+                                                <div class="sub font-size-13"style="font-size: 12px;">Calculate tax liabilities and deductions</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- Retirement -->
+                                    <li>
+                                        <a href="/finance/retirement.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/pension.svg" alt="Retirement Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Retirement Calculator</div>
+                                                <div class="sub font-size-13" style="font-size: 12px;">Plan for retirement savings, investments, etc.</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                
+                                </ul>
+                            </div>
+                            <a href="/contact.html">Contact</a>
+                            <a href="/login.html">Login</a>
+                            <a href="/register.html">Sign Up</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <!-- Main content -->
-    <div class="container">
-        <!-- Hero Section -->
-        <section id="hero" class="animate__animated animate__fadeIn">
-            <div class="hero-content">
-                <div class="search-container">
-                    <input type="text" id="search-input" placeholder="Search for a stock">
-                    <div id="suggestion-container"></div>
+    <div class="homecontainer">
+        <div class="content-wrapper">
+            <!-- Left Sidebar - Gainers/Losers -->
+           <div class="sidebar">
+             <div class="sidebargainer">
+                <div class="heading">
+                    <h2>Top Gainers</h2>
                 </div>
-                <h1>Empower Your Financial Journey</h1>
-                <p>Discover powerful tools and insights to navigate your finances and investments with confidence.</p>
+                <ul>
+                    {% for gainer in gainers %}
+                      <li>{{ gainer }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              <div class="sidebarloser">
+
+                <div class="heading">
+                    <h2>Top Losers</h2>
+                </div>
+                <ul>
+                    {% for loser in losers %}
+                      <li>{{ loser }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
             </div>
-        </section>
+            <!-- Hero Section -->
+            <section id="hero" class="animate__animated animate__fadeIn">
+                <div class="hero-content">
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Search for a stock">
+                        <div id="suggestion-container"></div>
+                    </div>
+                    <h1>Empower Your Financial Journey</h1>
+                    <p>Discover powerful tools and insights to navigate your finances and investments with confidence.</p>
+                </div>
+            </section>
+            <!-- Right Sidebar - Most Active -->
+            <div class="sidebar right">
+                <div class="heading">
+                    <h2>Most Active</h2>
+                </div>
+                <ul id="most-active">
+                    <!-- Placeholder for Most Active data -->
+                    <ul>
+                        {% for active_stock in most_active %}
+                          <li>{{ active_stock }}</li>
+                        {% endfor %}
+                      </ul>
+            </div>
+        </div>
 
         <!-- Features Section -->
         <section id="features">
@@ -63,52 +259,48 @@
         <section id="testimonials">
             <h2>What Our Customers Say</h2>
             <div class="testimonial-container">
-                <div class="testimonial-slides">
-                    <div class="testimonial">
-                        <p>"InvestMash has been an invaluable resource for managing my investments. The tools are easy to use and provide valuable insights."</p>
-                        <cite>John Doe</cite>
+
+                    <div class="testimonial-slides">
+                        <div class="testimonial">
+                            <p>"InvestMash has been an invaluable resource for managing my investments. The tools are easy to use and provide valuable insights."</p>
+                            <cite>John Doe</cite>
+                        </div>
+                        <div class="testimonial">
+                            <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                            <cite>Jane Smith</cite>
+                        </div>
+                        <div class="testimonial">
+                            <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                            <cite>Jane Smith</cite>
+                        </div>
+                        <div class="testimonial">
+                            <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                            <cite>Jane Smith</cite>
+                        </div>                        <div class="testimonial">
+                            <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                            <cite>Jane Smith</cite>
+                        </div>                        <div class="testimonial">
+                            <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                            <cite>Jane Smith</cite>
+                        </div>                        <div class="testimonial">
+                            <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                            <cite>Jane Smith</cite>
+                        </div>                        <div class="testimonial">
+                            <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                            <cite>Jane Smith</cite>
+                        </div>                        <div class="testimonial">
+                            <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
+                            <cite>Jane Smith</cite>
+                        </div>
+                        <!-- Add more testimonials here -->
                     </div>
-                    <div class="testimonial">
-                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
-                        <cite>Jane Smith</cite>
-                    </div>
-                    <div class="testimonial">
-                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
-                        <cite>Jane Smith</cite>
-                    </div>                    <div class="testimonial">
-                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
-                        <cite>Jane Smith</cite>
-                    </div>                    <div class="testimonial">
-                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
-                        <cite>Jane Smith</cite>
-                    </div>                    <div class="testimonial">
-                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
-                        <cite>Jane Smith</cite>
-                    </div>                    <div class="testimonial">
-                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
-                        <cite>Jane Smith</cite>
-                    </div>                    <div class="testimonial">
-                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
-                        <cite>Jane Smith</cite>
-                    </div>                    <div class="testimonial">
-                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
-                        <cite>Jane Smith</cite>
-                    </div>                    <div class="testimonial">
-                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
-                        <cite>Jane Smith</cite>
-                    </div>                    <div class="testimonial">
-                        <p>"I love the simplicity and effectiveness of the personal finance calculators. It's made budgeting and planning so much easier!"</p>
-                        <cite>Jane Smith</cite>
-                    </div>
-                    <!-- Add more testimonials here -->
-                </div>
+                </marquee>
+
                 <button class="prev">&#10094;</button>
                 <button class="next">&#10095;</button>
             </div>
         </section>
-
     </div>
-
 
     <!-- Include the footer -->
     {% include 'footer.html' %}

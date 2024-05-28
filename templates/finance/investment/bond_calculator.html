@@ -4,9 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bond Calculator</title>
+        <!-- External CSS libraries -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <link rel="stylesheet" href="/static/css/index.css">
+        <link rel="stylesheet" href="/static/css/calculator.css">
+        <script src="/static/js/script.js"></script>
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/logo icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/logo icon.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/logo icon.png">
+        <link rel="manifest" href="/static/favicon/site.webmanifest">
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         /* Styles for header, main, and form */
-        body {
+        /* body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -18,7 +34,7 @@
             color: #fff;
             padding: 20px;
             text-align: center;
-        }
+        } */
 
         main {
             max-width: 800px;
@@ -43,7 +59,7 @@
             margin-bottom: 6px;
         }
 
-        input[type="number"], button {
+        input[type="number"], .calbutton {
             padding: 10px;
             margin-bottom: 10px;
             width: 100%;
@@ -53,14 +69,14 @@
             font-size: 16px;
         }
 
-        button {
+        .calbutton {
             background-color: #333;
             color: #fff;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
-        button:hover {
+        .calbutton:hover {
             background-color: #555;
         }
 
@@ -106,6 +122,164 @@
     </style>
 </head>
 <body>
+        <!-- Navbar placeholder -->
+        <nav class="u-full-width no-print">
+            <!-- Mobile Navigation Holder -->
+            <div class="mobile-nav">
+                <!-- Logo -->
+                <div class="logo-holder">
+                    <a href="{{ url_for('index') }}" class="logo-holder">
+                        <img alt="InvestMash" class="logo" src="/static/favicon/InvestMash.png"/>
+                    </a>            
+                </div>
+                <!-- Menu Icon -->
+                <div class="menu-icon" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <!-- Mobile Navigation Content -->
+                <div id="mobile-menu" class="mobile-menu">
+                    <!-- Navigation Links -->
+                    <div class="mobile-links">
+                        <a href="{{ url_for('index') }}">Home</a>
+                        <a href="{{ url_for('explore_screener') }}">Screens</a>
+                        <a href="/finance/personal_finance.html">Personal Finance</a>
+                        <a href="/contact.html">Contact</a>
+                        <a href="/login/indexd41d.html?">Login</a>
+                        <a href="/register/indexd41d.html?">Sign Up</a>
+                    </div>
+        
+                </div>
+            </div>
+            <!-- Top Navigation Holder (for desktop) -->
+            <div class="top-nav-holder">
+                <div class="container">
+                    <div class="layer-holder top-navigation">
+                        <div class="layer flex flex-space-between" style="align-items: center; height: 50px">
+                            <!-- Logo -->
+                            <a href="{{ url_for('index') }}" class="logo-holder">
+                                    <img alt="InvestMash" class="logo" src="/static/favicon/InvestMash.png"/>
+                            </a>                    
+        
+                            <!-- Menu Items -->
+                            <div class="desktop-links">
+                                <a href="{{ url_for('index') }}">Home</a>
+                                <a href="{{ url_for('explore_screener') }}">Screens</a>
+                                <div class="dropdown-menu">
+                                    <button class="button-plain" type="button" onclick="toggleDropdown(event)">
+                                        Personal Finance
+                                        <i class="icon-down"></i>
+                                    </button>
+                                    <ul class="dropdown-content flex-column tools-menu" style="width: 350px" id="nav-tools-menu">
+                                        <li>
+                                            <a href="/finance/investment.html" class="flex flex-align-center flex-gap-16">
+                                                <div class="bg-stripes square-56">
+                                                    <img src="/static/favicon/investment.svg" alt="Investment Calculator">
+                                                </div>
+                                                <div>
+                                                    <div class="font-weight-500 font-size-14" style="font-weight: 850;font-size: 15px;">Investment Calculator</div>
+                                                    <div class="sub font-size-13" style="font-size: 12px;">Calculate interest, returns, savings, etc.</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        
+                                        <!-- Budgeting and Saving -->
+                                        <li>
+                                            <a href="/finance/budgeting_saving.html" class="flex flex-align-center flex-gap-16">
+                                                <div class="bg-stripes square-56">
+                                                    <img src="/static/favicon/saving and budgeting.svg" alt="Budgeting and Saving Calculator">
+                                                </div>
+                                                <div>
+                                                    <div class="font-weight-500 font-size-14" style="font-weight: 850;font-size: 15px;">Budgeting and Saving Calculator</div>
+                                                    <div class="sub font-size-13"style="font-size: 12px;">Manage your budget and savings goals</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <!-- Loans -->
+                                        <li>
+                                            <a href="/finance/loans.html" class="flex flex-align-center flex-gap-16">
+                                                <div class="bg-stripes square-56">
+                                                    <img src="/static/favicon/loan.svg" alt="Loans Calculator">
+                                                </div>
+                                                <div>
+                                                    <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Loans Calculator</div>
+                                                    <div class="sub font-size-13"style="font-size: 12px;">Calculate different types of loans</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <!-- Insurance -->
+                                        <li>
+                                            <a href="/finance/insurance.html" class="flex flex-align-center flex-gap-16">
+                                                <div class="bg-stripes square-56">
+                                                    <img src="/static/favicon/insurance.svg" alt="Insurance Calculator">
+                                                </div>
+                                                <div>
+                                                    <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Insurance Calculator</div>
+                                                    <div class="sub font-size-13"style="font-size: 12px;">Estimate insurance coverage and premiums</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <!-- Mortgages and Real Estate -->
+                                        <li>
+                                            <a href="/finance/mortgage_real_estate_calculator.html" class="flex flex-align-center flex-gap-16">
+                                                <div class="bg-stripes square-56">
+                                                    <img src="/static/favicon/mortgage.svg" alt="Mortgage and Real Estate Calculator">
+                                                </div>
+                                                <div>
+                                                    <div class="font-weight-500 font-size-14" style="font-weight: 850;font-size: 15px;">Mortgage and Real Estate Calculator</div>
+                                                    <div class="sub font-size-13" style="font-size: 12px;">Calculate mortgage payments, rates, house affordability, etc.</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        
+                                    
+                                        <!-- Student Loans -->
+                                        <li>
+                                            <a href="/finance/student_loans.html" class="flex flex-align-center flex-gap-16">
+                                                <div class="bg-stripes square-56">
+                                                    <img src="/static/favicon/student.svg" alt="Student Loans Calculator">
+                                                </div>
+                                                <div>
+                                                    <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Student Loans Calculator</div>
+                                                    <div class="sub font-size-13"style="font-size: 12px;">Estimate student loan payments and options</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <!-- Taxes -->
+                                        <li>
+                                            <a href="/finance/taxes.html" class="flex flex-align-center flex-gap-16">
+                                                <div class="bg-stripes square-56">
+                                                    <img src="/static/favicon/tax.svg" alt="Taxes Calculator">
+                                                </div>
+                                                <div>
+                                                    <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Taxes Calculator</div>
+                                                    <div class="sub font-size-13"style="font-size: 12px;">Calculate tax liabilities and deductions</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <!-- Retirement -->
+                                        <li>
+                                            <a href="/finance/retirement.html" class="flex flex-align-center flex-gap-16">
+                                                <div class="bg-stripes square-56">
+                                                    <img src="/static/favicon/pension.svg" alt="Retirement Calculator">
+                                                </div>
+                                                <div>
+                                                    <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Retirement Calculator</div>
+                                                    <div class="sub font-size-13"style="font-size: 12px;">Plan for retirement savings, investments, etc.</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    
+                                    </ul>
+                                </div>
+                                <a href="/contact.html">Contact</a>
+                                <a href="/login.html">Login</a>
+                                <a href="/register.html">Sign Up</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
     <header>
         <h1>Bond Calculator</h1>
     </header>
@@ -124,7 +298,7 @@
                 <input type="number" id="yearsToMaturity" placeholder="Enter years to maturity" min="0" required>
                 <label for="marketRate">Market Rate (%)</label>
                 <input type="number" id="marketRate" placeholder="Enter market rate of interest" min="0" required>
-                <button type="button" onclick="calculateBond()">Calculate</button>
+                <button class="calbutton" type="button" onclick="calculateBond()">Calculate</button>
             </form>
             <!-- Result -->
             <div id="bondResult" class="result"></div>

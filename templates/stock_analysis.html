@@ -3,177 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Analysis - {{ stock_name }}</title>
+        <!-- External CSS libraries -->
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"> -->
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/static/css/stock_analysis.css">
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <link rel="stylesheet" href="/static/css/index.css">
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
+        <link rel="manifest" href="/static/favicon/site.webmanifest">
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #ece9e6, #ffffff);
-            color: #333;
-        }
 
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        h1, h2, h3 {
-            text-align: center;
-            margin: 20px 0;
-            color: #444;
-        }
-
-        h1 {
-            font-size: 2.5em;
-        }
-
-        h2 {
-            font-size: 2em;
-            color: #007bff;
-        }
-
-        h3 {
-            font-size: 1.5em;
-            color: #444;
-            margin-bottom: 10px;
-            text-align: center;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .stock-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .stock-header p {
-            font-size: 1.2em;
-            color: #555;
-        }
-
-        .key-metrics {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 30px;
-        }
-
-        .metric {
-            background-color: #007bff;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            width: 20%;
-            text-align: center;
-            font-size: 1.2em;
-        }
-
-        .table-section {
-            margin-bottom: 50px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-            font-size: 1em;
-            border-radius: 10px;
-            overflow: hidden;
-            table-layout: fixed;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: right;
-            border-bottom: 1px solid #ddd;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        th {
-            background-color: #007bff;
-            color: white;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 2;
-            font-size: 0.95em;
-        }
-
-        td {
-            background-color: #fff;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        tr:nth-child(even) td {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover td {
-            background-color: #f1f1f1;
-            color: #333;
-        }
-
-        .chart-container {
-            margin-bottom: 50px;
-        }
-
-        .collapsible {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 1.2em;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .collapsible:after {
-            content: '\002B';
-            color: white;
-            font-weight: bold;
-            float: right;
-            margin-left: 5px;
-        }
-
-        .active:after {
-            content: "\2212";
-        }
-
-        .content {
-            padding: 0 18px;
-            display: none;
-            overflow: hidden;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        @media screen and (max-width: 768px) {
-            .key-metrics {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .metric {
-                width: 80%;
-                margin-bottom: 10px;
-            }
-
-            th, td {
-                text-align: left;
-            }
-        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -229,36 +77,203 @@
         }
     </script>
 </head>
-<body>
+<body class="light">
+    <!-- Navbar placeholder -->
+    <nav class="u-full-width no-print">
+        <!-- Mobile Navigation Holder -->
+        <div class="mobile-nav">
+            <!-- Logo -->
+            <div class="logo-holder">
+                <a href="{{ url_for('index') }}" class="logo-holder">
+                    <img alt="InvestMash" class="logo" src="/static/favicon/InvestMash.png"/>
+                </a>            
+            </div>
+            <!-- Menu Icon -->
+            <div class="menu-icon" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <!-- Mobile Navigation Content -->
+            <div id="mobile-menu" class="mobile-menu">
+                <!-- Navigation Links -->
+                <div class="mobile-links">
+                    <a href="{{ url_for('index') }}">Home</a>
+                    <a href="{{ url_for('explore_screener') }}">Screens</a>
+                    <a href="/finance/personal_finance.html">Personal Finance</a>
+                    <a href="/contact.html">Contact</a>
+                    <a href="/login/indexd41d.html?">Login</a>
+                    <a href="/register/indexd41d.html?">Sign Up</a>
+                </div>
+    
+            </div>
+        </div>
+        <!-- Top Navigation Holder (for desktop) -->
+        <div class="top-nav-holder">
+            <div class="container">
+                <div class="layer-holder top-navigation">
+                    <div class="layer flex flex-space-between" style="align-items: center; height: 50px">
+                        <!-- Logo -->
+                        <a href="{{ url_for('index') }}" class="logo-holder">
+                                <img alt="InvestMash" class="logo" src="/static/favicon/InvestMash.png"/>
+                        </a>                    
+    
+                        <!-- Menu Items -->
+                        <div class="desktop-links">
+                            <a href="{{ url_for('index') }}">Home</a>
+                            <a href="{{ url_for('explore_screener') }}">Screens</a>
+                            <div class="dropdown-menu">
+                                <button class="button-plain" type="dropdown" onclick="toggleDropdown(event)">
+                                    Personal Finance
+                                    <i class="icon-down"></i>
+                                </button>
+                                <ul class="dropdown-content flex-column tools-menu" style="width: 350px" id="nav-tools-menu">
+                                    <li>
+                                        <a href="/finance/investment.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/investment.svg" alt="Investment Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14" style="font-weight: 850;font-size: 15px;">Investment Calculator</div>
+                                                <div class="sub font-size-13" style="font-size: 12px;">Calculate interest, returns, savings, etc.</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    
+                                    <!-- Budgeting and Saving -->
+                                    <li>
+                                        <a href="/finance/budgeting_saving.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/saving and budgeting.svg" alt="Budgeting and Saving Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14" style="font-weight: 850;font-size: 15px;">Budgeting and Saving Calculator</div>
+                                                <div class="sub font-size-13"style="font-size: 12px;">Manage your budget and savings goals</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- Loans -->
+                                    <li>
+                                        <a href="/finance/loans.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/loan.svg" alt="Loans Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Loans Calculator</div>
+                                                <div class="sub font-size-13"style="font-size: 12px;">Calculate different types of loans</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- Insurance -->
+                                    <li>
+                                        <a href="/finance/insurance.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/insurance.svg" alt="Insurance Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Insurance Calculator</div>
+                                                <div class="sub font-size-13"style="font-size: 12px;">Estimate insurance coverage and premiums</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- Mortgages and Real Estate -->
+                                    <li>
+                                        <a href="/finance/mortgage_real_estate_calculator.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/mortgage.svg" alt="Mortgage and Real Estate Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14" style="font-weight: 850;font-size: 15px;">Mortgage and Real Estate Calculator</div>
+                                                <div class="sub font-size-13" style="font-size: 12px;">Calculate mortgage payments, rates, house affordability, etc.</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    
+                                
+                                    <!-- Student Loans -->
+                                    <li>
+                                        <a href="/finance/student_loans.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/student.svg" alt="Student Loans Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Student Loans Calculator</div>
+                                                <div class="sub font-size-13"style="font-size: 12px;">Estimate student loan payments and options</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- Taxes -->
+                                    <li>
+                                        <a href="/finance/taxes.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/tax.svg" alt="Taxes Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Taxes Calculator</div>
+                                                <div class="sub font-size-13"style="font-size: 12px;">Calculate tax liabilities and deductions</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- Retirement -->
+                                    <li>
+                                        <a href="/finance/retirement.html" class="flex flex-align-center flex-gap-16">
+                                            <div class="bg-stripes square-56">
+                                                <img src="/static/favicon/pension.svg" alt="Retirement Calculator">
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-500 font-size-14"style="font-weight: 850;font-size: 15px;">Retirement Calculator</div>
+                                                <div class="sub font-size-13"style="font-size: 12px;">Plan for retirement savings, investments, etc.</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                
+                                </ul>
+                            </div>
+                            <a href="/contact.html">Contact</a>
+                            <a href="/login.html">Login</a>
+                            <a href="/register.html">Sign Up</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
     <div class="container">
         <div class="stock-header">
             <h2>{{ stock_name }}</h2>
             <p>Stock Analysis and Financial Overview</p>
         </div>
-        <div class="key-metrics">
-            <div class="metric">
-                <p>Current Price</p>
-                <p>{{ data_profit_loss['Price'][-1] }}</p>
+        <div class="data-section">
+            <div class="data-item">
+                <span class="data-title">Current Price</span>
+                <span class="data-value">{{ other_data['Currentprice'] }}</span>
             </div>
-            <div class="metric">
-                <p>Net Profit</p>
-                <p>{{ data_profit_loss['Net profit'][-1] }}</p>
+            <div class="data-item">
+                <span class="data-title">P/E Ratio</span>
+                <span class="data-value">{{ data_profit_loss['Price to earning'][-1]}}</span>
             </div>
-            <div class="metric">
-                <p>EPS</p>
-                <p>{{ data_profit_loss['EPS'][-1] }}</p>
+            <div class="data-item">
+                <span class="data-title">Market Cap</span>
+                <span class="data-value">{{ other_data['Marketcap'] }}</span>
             </div>
-            <div class="metric">
-                <p>P/E Ratio</p>
-                <p>{{ data_profit_loss['Price to earning'][-1] }}</p>
+            <div class="data-item">
+                <span class="data-title">Face Value</span>
+                <span class="data-value">{{ other_data['Facevalue'] }}</span>
+            </div>
+            <div class="data-item">
+                <span class="data-title">Net Profit</span>
+                <span class="data-value">{{ data_profit_loss['Net profit'][-1] }}</span>
+            </div>
+            <div class="data-item">
+                <span class="data-title">EPS</span>
+                <span class="data-value">{{ data_profit_loss['EPS'][-1] }}</span>
             </div>
         </div>
-
         <div class="chart-container">
             <h3>Profit & Loss Chart</h3>
             <canvas id="profitLossChart"></canvas>
         </div>
-
+        <div class="stock-header">
+            <h2>Fundamental Data</h2>
+        </div>        
         <button type="button" class="collapsible">Profit & Loss Statement</button>
         <div class="content">
             <table>
@@ -363,7 +378,8 @@
             </table>
         </div>
     </div>
-
+    <!-- Include the footer -->
+    {% include 'footer.html' %}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Data for the Profit & Loss Chart
@@ -372,5 +388,11 @@
             createChart('profitLossChart', profitLossLabels, profitLossData, 'Net Profit');
         });
     </script>
+
+
+    <!-- Custom script -->
+    <script src="/static/js/script.js"></script>
+    <!-- Additional JavaScript for stock analysis -->
+    <script src="/static/js/stock-analysis.js"></script>
 </body>
 </html>

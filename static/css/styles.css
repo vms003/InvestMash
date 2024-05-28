@@ -5,13 +5,13 @@
 }
 
 .no-print .container {
-    
+    min-height: 60px;
     width: 95%;
     max-width: 1500px;
     margin: 0 auto;
 }
 .no-print .top-nav-holder {
-    height: 80px; /* Increase the height as desired */
+    height: 60px; /* Increase the height as desired */
     background-color: #ffffff;
     border-bottom: 1px solid #969696;
 }
